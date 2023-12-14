@@ -49,7 +49,8 @@ class ModelUser extends CI_Model
             $data = array(
                 'alamat' => $hasil,
                 'nama' => $nama,
-                'no_telp' => $noTelepon
+                'no_telp' => $noTelepon,
+                'state' => 1
             );
     
             // Lakukan update ke dalam tabel 'detail_user'
@@ -63,7 +64,8 @@ class ModelUser extends CI_Model
                 'id' => $id,
                 'alamat' => $hasil,
                 'nama' => $nama,
-                'no_telp' => $noTelepon
+                'no_telp' => $noTelepon,
+                'state' => 1
             );
     
             // Lakukan insert ke dalam tabel 'detail_user'
@@ -78,19 +80,48 @@ class ModelUser extends CI_Model
     {
         // Ganti 'detail_user' dengan nama tabel yang sesuai
         $this->db->where('id', $id);
-        $this->db->where('status', 1);
+        $this->db->where('state', 1);
         $query = $this->db->get('detail_user');
         
-        return $query->row_array();
+        return $query;
     }
     public function getAlamat($id)
     {
         // Ganti 'detail_user' dengan nama tabel yang sesuai
         $this->db->select('alamat');
         $this->db->where('id', $id);
-        $this->db->where('status', 1);
+        $this->db->where('state', 1);
         $query = $this->db->get('detail_user');
         
         return $query->row_array();
+    }
+
+    public function getAlamat1($user_id)
+    {
+        // Ganti 'detail_user' dengan nama tabel yang sesuai
+        $this->db->select('id_alamat');
+        $this->db->from('detail_user');
+        $this->db->where('id', $user_id);
+        $this->db->where('state', 1);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return $result->id_alamat;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function deleteRow($id) {
+        // Lakukan operasi penghapusan pada database
+        // Gantilah 'table_name' dengan nama tabel Anda
+        $user=$this->session->userdata('id');
+        $this->db->where('id_alamat', $id);
+        $this->db->where('id', $user);
+        $deleted = $this->db->delete('detail_user');
+        
+        return $deleted;
     }
 }

@@ -29,4 +29,5 @@
 
     <!-- Template Stylesheet -->
     <link href="<?= base_url('assets/back-end/'); ?>css/style.css" rel="stylesheet">
+    <link rel = "stylesheet" href = "<?= base_url('assets/front-end/');?>detail_pesanan.css">
 </head>

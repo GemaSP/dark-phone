@@ -20,11 +20,11 @@ class Pelanggan extends CI_Controller
 
         $user = $this->ModelUser->cekData(['email' => $email])->row_array();
 
-        //jika usernya ada
+        // Jika usernya ada
         if ($user) {
-            //jiks user sudah aktif
+            // Jika user sudah aktif
             if ($user['is_active'] == 1) {
-                //cek password
+                // Cek password
                 if (password_verify($password, $user['password'])) {
                     $data = [
                         'id' => $user['id'],
@@ -35,32 +35,34 @@ class Pelanggan extends CI_Controller
 
                     $this->session->set_userdata($data);
                     if ($user['role_id'] == 2) {
-                        redirect('home');
-                    } else {redirect('home');}}
-                        
-        
+                        // Redirect sesuai kebutuhan setelah login berhasil
+                        echo json_encode(array('success' => true, 'redirect' => 'home'));
+                    } else {
+                        echo json_encode(array('success' => true, 'redirect' => 'home'));
+                    }
+                } else {
+                    // Password salah
+                    echo json_encode(array('success' => false, 'message' => 'Password salah!!'));
+                }
             } else {
-                 // siapkan token
-            $email = $this->input->post('email', true);
-            $token = base64_encode(random_bytes(32));
-            $user_token = [
-                'email' => $email,
-                'token' => $token,
-                'date_created' => time()
-            ];
+                // Jika user belum aktif
+                $email = $this->input->post('email', true);
+                $token = base64_encode(random_bytes(32));
+                $user_token = [
+                    'email' => $email,
+                    'token' => $token,
+                    'date_created' => time()
+                ];
 
-            $this->db->insert('user_token', $user_token);
+                $this->db->insert('user_token', $user_token);
 
-            $this->_sendEmail($token, 'verify');
-
-                
+                $this->_sendEmail($token, 'verify');
             }
         } else {
-            $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Email tidak terdaftar!!</div>');
-            redirect('home');
+            // Email tidak terdaftar
+            echo json_encode(array('success' => false, 'message' => 'Email tidak terdaftar!!'));
         }
     }
-
     public function registrasi()
     {
         if ($this->session->userdata('email')) {
@@ -91,7 +93,11 @@ class Pelanggan extends CI_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
-            $this->load->view('templates/templates-pelanggan');
+            $this->load->view('templates/front-end/fheader');
+            $this->load->view('templates/front-end/ftopbar');
+            $this->load->view('templates/front-end/fcarousel');
+            $this->load->view('home/index');
+            $this->load->view('templates/front-end/ffooter');
         } else {
             $email = $this->input->post('email', true);
             $data = [

@@ -35,72 +35,91 @@ class Home extends CI_Controller
         $this->load->view('templates/front-end/ffooter', $data);
     }
 
-    
+
 
     public function tambahKeranjang()
     {
-        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-        $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
-        $id = $this->session->userdata('id');
-        $idGadget = $this->uri->segment(3);
-
-        // Check if the combination of id and id_gadget already exists
-        $existingData = $this->ModelGadget->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
-
-        if (!$existingData) {
-            // If the combination doesn't exist, insert new data
-            $insert = [
-                'id' => $id,
-                'id_gadget' => $idGadget,
-                'jumlah_barang' => 1
-            ];
-            $this->db->insert('keranjang', $insert);
+        if (!$this->session->userdata('email')) {
+            // Tampilkan pesan jika tidak ada session
+            echo "<script>alert('Silahkan login terlebih dahulu sebelum menambah item pada keranjang');</script>";
         } else {
-            // If the combination exists, increment the jumlah_barang
-            $currentQuantity = $existingData['jumlah_barang'];
-            $newQuantity = $currentQuantity + 1;
+            // Lakukan operasi tambah ke keranjang jika session ada
+            // ...
+            $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
+            $data['merek'] = $this->ModelGadget->getMerek()->result_array();
+            $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
+            $id = $this->session->userdata('id');
+            $idGadget = $this->uri->segment(3);
 
-            $this->db->set('jumlah_barang', $newQuantity);
-            $this->db->where('id', $id);
-            $this->db->where('id_gadget', $idGadget);
-            $this->db->update('keranjang');
+            // Check if the combination of id and id_gadget already exists
+            $existingData = $this->ModelGadget->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
+
+            if (!$existingData) {
+                // If the combination doesn't exist, insert new data
+                $insert = [
+                    'id' => $id,
+                    'id_gadget' => $idGadget,
+                    'jumlah_barang' => 1
+                ];
+                $this->db->insert('keranjang', $insert);
+            } else {
+                // If the combination exists, increment the jumlah_barang
+                $currentQuantity = $existingData['jumlah_barang'];
+                $newQuantity = $currentQuantity + 1;
+
+                $this->db->set('jumlah_barang', $newQuantity);
+                $this->db->where('id', $id);
+                $this->db->where('id_gadget', $idGadget);
+                $this->db->update('keranjang');
+            }
         }
-
         redirect('home');
     }
 
+    public function checkSessionStatus() {
+        // Lakukan pemeriksaan sesi di sini (misalnya, cek session user)
+        $isLoggedIn = $this->session->userdata('email'); // Ganti ini dengan logika sesuai dengan sesi Anda
+    
+        // Kirim respons sebagai JSON ke JavaScript
+        header('Content-Type: application/json');
+        echo json_encode(['isLoggedIn' => $isLoggedIn]);
+        exit();
+    }
     public function buyNow()
     {
-        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-        $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
-        $id = $this->session->userdata('id');
-        $idGadget = $this->uri->segment(3);
-
-        // Check if the combination of id and id_gadget already exists
-        $existingData = $this->ModelGadget->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
-
-        if (!$existingData) {
-            // If the combination doesn't exist, insert new data
-            $insert = [
-                'id' => $id,
-                'id_gadget' => $idGadget,
-                'jumlah_barang' => 1
-            ];
-            $this->db->insert('keranjang', $insert);
+        if (!$this->session->userdata('email')) {
+            redirect('home');
         } else {
-            // If the combination exists, increment the jumlah_barang
-            $currentQuantity = $existingData['jumlah_barang'];
-            $newQuantity = $currentQuantity + 1;
+            $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
+            $data['merek'] = $this->ModelGadget->getMerek()->result_array();
+            $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
+            $id = $this->session->userdata('id');
+            $idGadget = $this->uri->segment(3);
 
-            $this->db->set('jumlah_barang', $newQuantity);
-            $this->db->where('id', $id);
-            $this->db->where('id_gadget', $idGadget);
-            $this->db->update('keranjang');
+            // Check if the combination of id and id_gadget already exists
+            $existingData = $this->ModelGadget->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
+
+            if (!$existingData) {
+                // If the combination doesn't exist, insert new data
+                $insert = [
+                    'id' => $id,
+                    'id_gadget' => $idGadget,
+                    'jumlah_barang' => 1
+                ];
+                $this->db->insert('keranjang', $insert);
+            } else {
+                // If the combination exists, increment the jumlah_barang
+                $currentQuantity = $existingData['jumlah_barang'];
+                $newQuantity = $currentQuantity + 1;
+
+                $this->db->set('jumlah_barang', $newQuantity);
+                $this->db->where('id', $id);
+                $this->db->where('id_gadget', $idGadget);
+                $this->db->update('keranjang');
+            }
+
+            redirect('keranjang');
         }
-
-        redirect('keranjang');
     }
 
     public function ubahProfil()

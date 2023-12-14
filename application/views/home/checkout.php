@@ -5,19 +5,23 @@
       <h5 class="card-title"><i class="bi bi-geo-alt-fill"></i> Alamat Pengiriman</h5>
       <div class="row">
         <div class="col-auto">
-          <p class="card-text">Nama:
-            <?= $detail_user['nama']; ?>
-          </p>
-          <p class="card-text">No Telepon: <?= $detail_user['no_telp']; ?></p>
+          <p class="card-text">Nama: <span id="namaOutput">
+              <?= isset($detail_user['nama']) ? $detail_user['nama'] : 'Nama Belum Dimasukkan'; ?>
+            </span></p>
+          <p class="card-text">No Telepon: <span id="noTelpOutput">
+              <?= isset($detail_user['no_telp']) ? $detail_user['no_telp'] : 'No Telepon Belum Dimasukkan'; ?>
+            </span></p>
         </div>
         <div class="col d-flex justify-content-between align-items-center">
-            <?php if ($detail_user['status'] == 1): ?>
-              <div class="text-justify">
-                <p class="card-text mb-0">
-                  <?= $detail_user['alamat']; ?>
-                </p>
-              </div>
-            <?php endif; ?>
+          <?php if (isset($detail_user['state']) && $detail_user['state'] == 1): ?>
+            <div class="text-justify">
+              <p id="alamatOutput" class="card-text mb-0">
+                <?= isset($detail_user['alamat']) ? $detail_user['alamat'] : 'Alamat Belum Dimasukkan'; ?>
+              </p>
+            </div>
+          <?php else: ?>
+            <p class="card-text">Alamat belum dimasukkan</p>
+          <?php endif; ?>
           <button data-bs-toggle="modal" data-bs-target="#exampleModal"
             class="btn btn-sm btn-outline-primary">Ubah</button>
         </div>
@@ -42,7 +46,7 @@
         <div class="row align-items-center mb-2">
 
           <div class="col text-start">
-            <img src="<?= base_url('assets/back-end/img/upload/') . $g['image']; ?>" alt="Produk" class="img-fluid"
+            <img src="<?= base_url('assets/back-end/img/upload/') . $g['img']; ?>" alt="Produk" class="img-fluid"
               style="max-width: 50px;">
             <?= $g['nama_gadget']; ?>
           </div>
@@ -65,7 +69,7 @@
     <div class="card-body">
       <h5 class="card-title">Metode Pembayaran</h5>
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-        <button class="btn btn-outline-secondary me-md-2 mb-2" type="button">E-wallet</button>
+        <button class="btn btn-outline-secondary me-md-2 mb-2" type="button">Darkpay</button>
         <button class="btn btn-outline-secondary me-md-2 mb-2" type="button">COD</button>
         <!-- Tambahkan tombol lainnya -->
       </div>
@@ -143,56 +147,66 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
-      
-        <form action="<?= base_url('keranjang/simpanAlamat'); ?>" method="post">
+
+        <form action="<?= base_url('keranjang/simpanAlamat'); ?>" method="post" id="formAlamat">
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="nama" class="form-label">Nama Lengkap</label>
-              <input type="text" class="form-control" id="nama" name="nama" value="<?= $detail_user['nama'];?>">
+              <input type="text" class="form-control" id="nama" name="nama"
+                value="<?= isset($detail_user['nama']) ? $detail_user['nama'] : 'Isikan data'; ?>">
             </div>
             <div class="col-md-6">
               <label for="no_telepon" class="form-label">No Telepon</label>
-              <input type="text" class="form-control" id="no_telepon" name="no_telepon" value="<?= $detail_user['no_telp'];?>">
+              <input type="text" class="form-control" id="no_telepon" name="no_telepon"
+                value="<?= isset($detail_user['no_telp']) ? $detail_user['no_telp'] : 'Isikan data'; ?>">
             </div>
           </div>
           <div class="mb-3">
             <label for="alamat" class="form-label">Alamat Lengkap</label>
-            <textarea class="form-control" id="alamat" name="alamat" rows="3"><?=$alamat;?></textarea>
+            <textarea class="form-control" id="alamat" name="alamat"
+              rows="3"><?= isset($alamat) ? $alamat : 'Isikan data'; ?></textarea>
           </div>
           <div class="row mb-3">
             <div class="col-md-3">
-              <label for="rw" class="form-label">RT</label>
-              <input type="text" class="form-control" id="rt" name="rt" value="<?=$rt;?>">
+              <label for="rt" class="form-label">RT</label>
+              <input type="text" class="form-control" id="rt" name="rt"
+                value="<?= isset($rt) ? $rt : 'Isikan data'; ?>">
             </div>
             <div class="col-md-3">
               <label for="rw" class="form-label">RW</label>
-              <input type="text" class="form-control" id="rw" name="rw" value="<?=$rw;?>">
+              <input type="text" class="form-control" id="rw" name="rw"
+                value="<?= isset($rw) ? $rw : 'Isikan data'; ?>">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="kelurahan" class="form-label">Kelurahan</label>
-              <input type="text" class="form-control" id="kelurahan" name="kelurahan" value="<?=$kelurahan;?>">
+              <input type="text" class="form-control" id="kelurahan" name="kelurahan"
+                value="<?= isset($kelurahan) ? $kelurahan : 'Isikan data'; ?>">
             </div>
             <div class="col-md-6">
               <label for="kecamatan" class="form-label">Kecamatan</label>
-              <input type="text" class="form-control" id="kecamatan" name="kecamatan" value="<?=$kecamatan;?>">
+              <input type="text" class="form-control" id="kecamatan" name="kecamatan"
+                value="<?= isset($kecamatan) ? $kecamatan : 'Isikan data'; ?>">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="kota" class="form-label">Kabupaten/Kota</label>
-              <input type="text" class="form-control" id="kota" name="kota" value="<?=$kota;?>">
+              <input type="text" class="form-control" id="kota" name="kota"
+                value="<?= isset($kota) ? $kota : 'Isikan data'; ?>">
             </div>
             <div class="col-md-6">
               <label for="provinsi" class="form-label">Provinsi</label>
-              <input type="text" class="form-control" id="provinsi" name="provinsi" value="<?=$provinsi;?>">
+              <input type="text" class="form-control" id="provinsi" name="provinsi"
+                value="<?= isset($provinsi) ? $provinsi : 'Isikan data'; ?>">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-3">
               <label for="kodepos" class="form-label">Kodepos</label>
-              <input type="text" class="form-control" id="kodepos" name="kodepos" value="<?=$kodepos;?>">
+              <input type="text" class="form-control" id="kodepos" name="kodepos"
+                value="<?= isset($kodepos) ? $kodepos : 'Isikan data'; ?>">
             </div>
           </div>
           <div class="form-check mb-3">
@@ -201,22 +215,45 @@
               Tandai sebagai rumah atau kantor
             </label>
           </div>
-
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <button type="submit" id="btnSimpan" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        <button type="submit" class="btn btn-primary">Simpan</button>
-      </div>
-      </form>
     </div>
   </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  document.getElementById('btnBuatPesanan').addEventListener('click', function () {
-    // Saat tombol "Buat Pesanan" ditekan, kirim formulir
-    document.getElementById('formPesan').submit();
-    var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-    myModal.show();
+  $(document).ready(function () {
+    $('#formAlamat').submit(function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'post',
+        data: $(this).serialize(),
+        success: function (response) {
+          console.log(response);
+          var scrollPosition = $(window).scrollTop();
+          location.reload();
+          $(window).scrollTop(scrollPosition);
+          $('#exampleModal').modal('hide');
+        },
+        error: function (error) {
+          console.log('Terjadi kesalahan: ' + error);
+        }
+      });
+    });
+
+    document.getElementById('btnSimpan').addEventListener('click', function () {
+      console.log('Tombol Simpan Ditekan');
+    });
+
+    document.getElementById('btnBuatPesanan').addEventListener('click', function () {
+      document.getElementById('formPesan').submit();
+      var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+      myModal.show();
+    });
   });
 </script>

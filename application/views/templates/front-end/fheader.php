@@ -13,5 +13,6 @@
     <link rel = "stylesheet" href = "<?= base_url('assets/front-end/detail/');?>style.css">
     <link rel = "stylesheet" href = "<?= base_url('assets/front-end/home/');?>css/main.css">
     <link rel = "stylesheet" href = "<?= base_url('assets/front-end/');?>detail_pesanan.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body class="bg-dark">

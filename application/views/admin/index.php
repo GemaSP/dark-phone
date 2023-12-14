@@ -24,7 +24,7 @@
                             <i class="fa fa-chart-area fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Penghasilan</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 class="mb-0"><?= $total_penghasilan; ?></h6>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                             <i class="fa fa-chart-pie fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Transaction</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 class="mb-0"><?= $jumlah_transaksi; ?></h6>
                             </div>
                         </div>
                     </div>
@@ -76,64 +76,30 @@
                         <a href="">Show All</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-white">
-                                    <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Invoice</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">id_pemesanan</th>
+                                    <th scope="col">total_transaksi</th>
+                                    <th scope="col">Tanggal_pesan</th>
+                                    <th scope="col">tanggal_kirim</th>
+                                    <th scope="col">tanggal_diterima</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php
+                                    $a = 1;
+                                    foreach ($transaksi as $t) { ?>
                                 <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+                                    <td><?= $t['id_transaksi']; ?></td>
+                                    <td><?= $t['id_pemesanan']; ?></td>
+                                    <td>Rp<?= $t['total_harga'] + 10000; ?></td>
+                                    <td><?= date('d F Y H:i:s', $t['tanggal_pesan']);?></td>
+                                    <td><?= date('d F Y H:i:s', $t['tanggal_kirim']); ?></td>
+                                    <td><?= date('d F Y H:i:s', $t['tanggal_diterima']); ?></td>
                                 </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>

@@ -44,4 +44,26 @@ class Pesanan extends CI_Controller
         $this->load->view('home/sub_page/detail_pesanan', $data);
         $this->load->view('templates/front-end/ffooter', $data);
     }
+
+    public function konfirmasi()
+    {
+        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
+        $data['merek'] = $this->ModelGadget->getMerek()->result_array();
+        // Pastikan untuk mengubah uri segment ke-3 sesuai dengan kebutuhan Anda
+        $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
+        $data['pemesanan'] = $this->ModelGadget->pemesananWhere(['pemesanan.id_pemesanan' => $this->uri->segment(3)])->row_array();
+        $jumlah_data = $this->ModelGadget->getJumlahData($this->session->userdata('id'));
+
+        $data['jumlah_data'] = $jumlah_data;
+        $id = $this->uri->segment(3);
+        $this->ModelGadget->konfirmasiPesanan($id);
+        $id_pesan = $this->uri->segment(3);
+        $this->ModelGadget->insertTransaksi($id_pesan);
+        redirect('pesanan');
+
+
+        // Tampilkan halaman lengkap jika bukan permintaan AJAX
+        // Tampilkan halaman lengkap jika bukan permintaan AJAX
+        
+    }
 }

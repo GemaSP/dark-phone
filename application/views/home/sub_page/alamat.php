@@ -82,10 +82,17 @@
             <div class="product-div-right bg-dark">
                 <div class="container bg-dark">
                     <article class="card bg-dark">
-                        <header class="card-header bg-dark">Alamat Saya</header>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <header class="card-header bg-dark">Alamat Saya</header>
+                            </div>
+                            <div class="col text-end">
+                                <button>Tambah Alamat</button>
+                            </div>
+                        </div>
 
                         <?php foreach ($detail_user as $alamat): ?>
-                            <div class="card-body bg-dark">
+                            <div class="card-body bg-dark" id="row_<?= $alamat['id_alamat']; ?>">
                                 <h6>Alamat:</h6>
                                 <article class="card bg-dark">
                                     <div class="card-body row">
@@ -99,6 +106,8 @@
                                         </div>
                                         <div class="col text-end">
                                             <a href="#" class="btn btn-link">Ubah</a>
+                                            <button class="btn btn-danger"
+                                                onclick="deleteRow(<?= $alamat['id_alamat']; ?>)">Hapus</button>
                                         </div>
                                     </div>
                                     <div class="card-body row">
@@ -119,3 +128,23 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function deleteRow(id) {
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('akun/delete_row'); ?>",
+            data: { id: id },
+            success: function (response) {
+                if (response === 'success') {
+                    var row = document.getElementById('row_' + id);
+                    row.remove(); // Hapus baris dari tampilan setelah penghapusan dari database berhasil
+                    updateTotalNilai(); // Panggil fungsi updateTotalNilai setelah baris dihapus
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Terjadi kesalahan: ', error);
+            }
+        });
+    }
+</script>

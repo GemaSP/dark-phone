@@ -19,7 +19,7 @@
                 <?php foreach ($gadget as $g): ?>
                     <div class="col-md-6 col-lg-4 col-xl-2 p-2  <?php echo $g['nama_merek']; ?>">
                         <div class="d-flex justify-content-center m-2">
-                            <img src="<?php echo base_url('assets/back-end/img/upload/') . $g['image']; ?>" width="160"
+                            <img src="<?php echo base_url('assets/back-end/img/upload/') . $g['img']; ?>" width="160"
                                 height="212">
                         </div>
                         <div class="text-center">
@@ -39,8 +39,8 @@
                         </div>
                         <!-- Badges for Add to Cart and Details -->
                         <div class="d-flex justify-content-center m-2">
-                            <a href="<?= base_url('home/tambahKeranjang/') . $g['id_gadget']; ?>"
-                                class="badge bg-primary d-flex me-2 text-decoration-none">
+                            <a  style="cursor: pointer;" data-id-gadget="<?= $g['id_gadget']; ?>"
+                                class="badge bg-primary d-flex me-2 text-decoration-none tombol_tambah_keranjang">
                                 <i class="fa fa-shopping-cart me-1"></i><span class="ms-1">Add</span>
                             </a>
                             <a href="<?= base_url('home/detailProducts/') . $g['id_gadget']; ?>"
@@ -76,62 +76,46 @@
 </section>
 <!-- end of about us -->
 
-<!-- Modal untuk form login -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog d-flex align-items-center justify-content-center">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Form Login</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Form login -->
-                <form method="post" action="<?= base_url('pelanggan'); ?>">
-                    <!-- Isi dengan form login yang sesuai -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
-                        <?= form_error('username', '<small class="text-danger pl-3">', '</small>'); ?>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                        <?= form_error('password', '<small class="text-danger pl-3">', '</small>'); ?>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Masuk</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal untuk form daftar -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog d-flex align-items-center justify-content-center">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="registerModalLabel">Form Daftar</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Form daftar -->
-                <form method="post" action="<?= base_url('pelanggan/registrasi'); ?>">
-                    <!-- Isi dengan form daftar yang sesuai -->
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Daftar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
+
+<script>
+function sessionExists() {
+    return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    resolve(response.isLoggedIn);
+                } else {
+                    reject(xhr.status);
+                }
+            }
+        };
+        xhr.open('GET', 'home/checkSessionStatus', true);
+        xhr.send();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var buttons = document.querySelectorAll('.tombol_tambah_keranjang');
+
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var gadgetID = this.getAttribute('data-id-gadget');
+            sessionExists().then(function(isLoggedIn) {
+                if (!isLoggedIn) {
+                    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                    errorModal.show();
+                } else {
+                    window.location.href ='<?= base_url('home/tambahKeranjang/'); ?>' + gadgetID;
+                    // ...
+                }
+            }).catch(function(error) {
+                console.error('Terjadi kesalahan: ' + error);
+            });
+        });
+    });
+});
+</script>

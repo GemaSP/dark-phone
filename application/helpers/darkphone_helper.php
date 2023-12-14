@@ -10,16 +10,27 @@ function cek_login()
     } else {
         $role_id = $ci->session->userdata('role_id');
     }
+
+    $data['user'] = $ci->ModelUser->cekData(['email' => $ci->session->userdata('email')])->row_array(); // Gunakan $ci->ModelUser daripada $this->ModelUser
+        if ($data['user']['role_id'] == 2) { // Perbaiki kondisi pengecekan role_id
+            $ci->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Akses ditolak. Anda belum login!!</div>');
+            redirect('home');
+        }
 }
 
 function cek_loginpelanggan()
 {
     $ci = get_instance();
-    $data['user'] = $ci->ModelUser->cekData(['email' => $ci->session->userdata('email')])->row_array(); // Gunakan $ci->ModelUser daripada $this->ModelUser
-    if ($data['user']['role_id'] == 2) { // Perbaiki kondisi pengecekan role_id
+    if (!$ci->session->userdata('email')) {
         $ci->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Akses ditolak. Anda belum login!!</div>');
         redirect('home');
     } else {
-        $role_id = $ci->session->userdata('role_id');
+        
     }
+
+    /* $data['user'] = $ci->ModelUser->cekData(['email' => $ci->session->userdata('email')])->row_array(); // Gunakan $ci->ModelUser daripada $this->ModelUser
+        if ($data['user']['role_id'] == 2) { // Perbaiki kondisi pengecekan role_id
+            $ci->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Akses ditolak. Anda belum login!!</div>');
+            redirect('home');
+        } */
 }

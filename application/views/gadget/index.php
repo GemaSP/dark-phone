@@ -41,7 +41,7 @@
                                     <td>
                                         <picture>
                                             <source srcset="" type="image/svg+xml">
-                                            <img width="100" src="<?= base_url('assets/back-end/img/upload/') . $g['image'];?>" class="img-fluid img-thumbnail" alt="...">
+                                            <img width="100" src="<?= base_url('assets/back-end/img/upload/') . $g['img'];?>" class="img-fluid img-thumbnail" alt="...">
                                         </picture>
                                     </td>
                                     <td><?= $g['stok']; ?></td>
@@ -174,7 +174,7 @@ foreach ($gadget as $g) { ?>
                         </select>
                     </div>
                     <div class="input-group mb-3">
-                    <input type="hidden" name="old_pict" id="old_pict" value="<?= $g['image']; ?>">
+                    <input type="hidden" name="old_pict" id="old_pict" value="<?= $g['img']; ?>">
                             <input type="file" class="form-control bg-dark" id="image" name="image" accept="image/*">
                     </div>
                     <div class="form-group mb-3">

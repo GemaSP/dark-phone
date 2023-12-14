@@ -63,7 +63,7 @@ class Keranjang extends CI_Controller
 
         $id = $this->session->userdata('id');
         // Memuat model
-        $data['detail_user'] = $this->ModelUser->getDetailUser($id);
+        $data['detail_user'] = $this->ModelUser->getDetailUser($id)->row_array();
 
 
         $selectedItems = $this->input->get('items');
@@ -117,10 +117,10 @@ class Keranjang extends CI_Controller
         $nama = $this->input->post('nama');
         $noTelepon = $this->input->post('no_telepon');
         $alamat = $this->input->post('alamat');
-        $rt = 'RT ' . $this->input->post('rt');
-        $rw = 'RW ' . $this->input->post('rw');
-        $kelurahan = 'Kelurahan ' . $this->input->post('kelurahan');
-        $kecamatan = 'Kecamatan ' . $this->input->post('kecamatan');
+        $rt = $this->input->post('rt');
+        $rw = $this->input->post('rw');
+        $kelurahan = $this->input->post('kelurahan');
+        $kecamatan = $this->input->post('kecamatan');
         $kota = $this->input->post('kota');
         $provinsi = $this->input->post('provinsi');
         $kodepos = $this->input->post('kodepos');
@@ -160,29 +160,36 @@ class Keranjang extends CI_Controller
         } else {
             $last_number = 0;
         }
+        $id_alamat = $this->ModelUser->getAlamat1($user_id);
+        if ($id_alamat !== false) {
+            // Jika id_alamat berhasil didapatkan, simpan ke dalam variabel di controller
+            $this->id_alamat = $id_alamat;
+            // Proses data produk yang diterima dari formulir
+            if (!empty($produk)) {
+                foreach ($produk as $index => $data_produk) {
+                    $next_number = $last_number + $index + 1;
+                    $next_order_id = 'PE' . str_pad($next_number, 3, '0', STR_PAD_LEFT);
 
-        // Proses data produk yang diterima dari formulir
-        if (!empty($produk)) {
-            foreach ($produk as $index => $data_produk) {
-                $next_number = $last_number + $index + 1;
-                $next_order_id = 'PE' . str_pad($next_number, 3, '0', STR_PAD_LEFT);
+                    // Proses setiap data produk
+                    $id_pesan = $next_order_id;
+                    $id = $user_id;
+                    $id_gadget = $data_produk['id'];
+                    $jumlah = $data_produk['jumlah'];
+                    $harga = $data_produk['harga'];
+                    $total = $jumlah * $harga;
+                    $status = 2;
+                    $id_alamat = $id_alamat;
+                    $tanggal_pesan = time();
 
-                // Proses setiap data produk
-                $id_pesan = $next_order_id;
-                $id = $user_id;
-                $id_gadget = $data_produk['id'];
-                $jumlah = $data_produk['jumlah'];
-                $harga = $data_produk['harga'];
-                $total = $jumlah * $harga;
-                $status = 2;
-
-                // Lakukan apa pun yang diperlukan dengan data produk ini
-                // Misalnya, simpan ke database, hitung total, dll.
-                // Contoh penyimpanan ke database:
-                $this->ModelGadget->insert_order_item($id_pesan, $id, $id_gadget, $jumlah, $total, $status);
-                $this->ModelGadget->hapus_item_keranjang($id, $id_gadget);
+                    // Lakukan apa pun yang diperlukan dengan data produk ini
+                    // Misalnya, simpan ke database, hitung total, dll.
+                    // Contoh penyimpanan ke database:
+                    $this->ModelGadget->insert_order_item($id_pesan, $id, $id_gadget, $jumlah, $total, $status, $id_alamat, $tanggal_pesan);
+                    $this->ModelGadget->hapus_item_keranjang($id, $id_gadget);
+                    $this->ModelGadget->kurangiStok($id_gadget, $jumlah);
+                }
             }
+            redirect('pesanan');
         }
-        redirect('pesanan');
     }
 }

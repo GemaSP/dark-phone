@@ -116,7 +116,7 @@ class Gadget extends CI_Controller
             $this->load->view('gadget/index', $data);
             $this->load->view('templates/footer');
         } else {
-            if ($this->upload->do_upload('image')) {
+            if ($this->upload->do_upload('img')) {
                 $image = $this->upload->data();
                 unlink('assets/back-end/img/upload/' . $this->input->post('old_pict', TRUE));
                 $gambar = $image['file_name'];
@@ -129,7 +129,7 @@ class Gadget extends CI_Controller
                 'tahun_rilis' => $this->input->post('tahun_rilis', true),
                 'stok' => $this->input->post('stok', true),
                 'harga' => $this->input->post('harga', true),
-                'image' => $gambar
+                'img' => $gambar
             ];
             $this->ModelGadget->updateGadget($data, ['id_gadget' => $this->uri->segment(3)]);
             redirect('gadget');

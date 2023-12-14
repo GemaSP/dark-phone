@@ -2,7 +2,7 @@
     <div class="container">
         <div class="product-div bg-dark text-white d-flex justify-content-center">
             <div class="product-div-left">
-                <img p src="<?= base_url('assets/back-end/img/upload/') . $gadget['image']; ?>" width="300" alt="watch">
+                <img p src="<?= base_url('assets/back-end/img/upload/') . $gadget['img']; ?>" width="300" alt="watch">
             </div>
             <div class="product-div-right">
                 <span class="product-name">
@@ -58,4 +58,3 @@
     </div>
 </section>
 <!-- end of about us -->
-<script src="<?= base_url('assets/front-end/detail/'); ?>script.js"></script>

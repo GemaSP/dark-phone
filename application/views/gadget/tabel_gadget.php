@@ -23,7 +23,7 @@
             <td>
                 <picture>
                     <source srcset="" type="image/svg+xml">
-                    <img width="100" src="<?= base_url('assets/img/upload/') . $g['image'];?>" class="img-fluid img-thumbnail" alt="...">
+                    <img width="100" src="<?= base_url('assets/img/upload/') . $g['img'];?>" class="img-fluid img-thumbnail" alt="...">
                 </picture>
             </td>
             <td><?= $g['stok']; ?></td>

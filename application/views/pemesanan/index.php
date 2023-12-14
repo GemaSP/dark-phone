@@ -23,11 +23,7 @@
                         <th scope="col">Kode Pemesanan</th>
                         <th scope="col">Nama Pembeli</th>
                         <th scope="col">Nama Smartphone</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Kuantitas</th>
-                        <th scope="col">Total Harga</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Tanggal Pesan</th>
                         <th scope="col">Pilihan</th>
                     </tr>
                 </thead>
@@ -44,15 +40,6 @@
                             </td>
                             <td>
                                 <?= $p['nama_gadget']; ?>
-                            </td>
-                            <td>Rp
-                                <?= $p['harga']; ?>
-                            </td>
-                            <td>
-                                <?= $p['qty']; ?>
-                            </td>
-                            <td>
-                                <?= $p['total_harga']; ?>
                             </td>
                             <td>
                                 <?php
@@ -71,21 +58,11 @@
                                 }
                                 ?>
                             </td>
-                            <td>belum ada</td>
                             <td>
-                                <a href="<?= base_url('Pemesanan/updatePemesanan/').$p['id_pemesanan'];?>" class="badge bg-warning text-dark"><i class="fas fa-edit"></i>
-                                    <?php
-                                    if ($p['status'] == 1) {
-                                        echo "Ingatkan";
-                                    } else if ($p['status'] == 2) {
-                                        echo "Kirimkan";
-                                    } else if ($p['status'] == 3) {
-                                        echo "Menunggu Konfirmasi";
-                                    } else {
-                                        echo "Selesai";
-                                    }
-                                    ?>
-                                </a>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#detailPemesananModal<?= $p['id_pemesanan']; ?>">
+                                    Detail
+                                </button>
                             </td>
                         </tr>
                     <?php } ?>
@@ -94,6 +71,203 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Ubah gadget baru-->
+<?php
+foreach ($pemesanan as $p) { ?>
+    <div class="modal fade" id="detailPemesananModal<?php echo $p['id_pemesanan']; ?>" tabindex="-1" role="dialog"
+        aria-labelledby="detailPemesananModalLabel" ariahidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailPemesananModalLabel">Detail Pemesanan</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <article class="card bg-secondary text-white mb-3 border-white">
+                        <div class="card-body bg-secondary">
+                            <h6>Order ID:
+                                <?= $p['id_pemesanan']; ?>
+                            </h6>
+                            <article class="card bg-secondary">
+                                <div class="card-body row">
+                                    <div class="card-body row">
+                                        <div class="col-auto">
+                                            <p class="card-text">Nama: <span id="namaOutput">
+                                                    <?= $p['nama']; ?>
+                                                </span></p>
+                                            <p class="card-text">No Telepon: <span id="noTelpOutput">
+                                                    <?= $p['no_telp']; ?>
+                                                </span></p>
+                                        </div>
+                                        <div class="col d-flex justify-content-between align-items-center">
+                                            <div class="text-justify">
+                                                <p id="alamatOutput" class="card-text mb-0">
+                                                    <?= $p['alamat']; ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            <?php if ($p['status'] == 1): ?>
+                                <div class="track text-white">
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                            class="text text-white">Pesanan dibuat</span> </div>
+                                    <div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">
+                                            Pesanan dikemas</span> </div>
+                                    <div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan dikirim</span> </div>
+                                    <div class="step"> <span class="icon"> <i class="fa fa-handshake"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan diterima</span> </div>
+                                </div>
+                            <?php elseif ($p['status'] == 2): ?>
+                                <div class="track text-white">
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                            class="text text-white">Pesanan dibuat</span> </div>
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-box"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan dikemas</span> </div>
+                                    <div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan dikirim</span> </div>
+                                    <div class="step"> <span class="icon"> <i class="fa fa-handshake"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan diterima</span> </div>
+                                </div>
+                            <?php elseif ($p['status'] == 3): ?>
+                                <div class="track text-white">
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                            class="text text-white">Pesanan dibuat</span> </div>
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-box"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan dikemas</span> </div>
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan dikirim</span> </div>
+                                    <div class="step"> <span class="icon"> <i class="fa fa-handshake"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan diterima</span> </div>
+                                </div>
+                            <?php elseif ($p['status'] == 4): ?>
+                                <div class="track text-white">
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                            class="text text-white">Pesanan dibuat</span> </div>
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-box"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan dikemas</span> </div>
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span
+                                            class="text text-white">
+                                            Pesanan dikirim</span> </div>
+                                    <div class="step active"> <span class="icon"> <i class="fa fa-handshake"></i> </span>
+                                        <span class="text text-white">
+                                            Pesanan diterima</span>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <hr>
+                            <ul class="row">
+                                <div class="row align-items-center mb-3">
+                                    <div class="col-auto">
+                                        <img src="<?= base_url('assets/back-end/img/upload/') . $p['img']; ?>" alt="Produk"
+                                            class="img-fluid" style="max-width: 50px;">
+                                    </div>
+                                    <div class="col">
+                                        <!-- Nama produk -->
+                                        <h6>
+                                            <?= $p['nama_gadget']; ?>
+                                        </h6>
+                                        <!-- Kuantitas -->
+                                        <p>Kuantitas:
+                                            <?= $p['qty']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col text-end">
+                                        <!-- Harga produk -->
+                                        <p>Harga:
+                                            Rp
+                                            <?php echo number_format($p['harga'], 0, '.', '.'); ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </ul>
+                            <hr class="m-0 p-0">
+                            <div class="row">
+                                <div class="col-9 border-end border-dark">
+                                    <p class="text-end">Subtotal Produk</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-end">
+                                        Rp
+                                        <?php echo number_format($p['total_harga'], 0, '.', '.'); ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr class="m-0 p-0">
+                            <div class="row">
+                                <div class="col-9 border-end border-dark">
+                                    <p class="text-end">Biaya Pengiriman</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-end">Rp8.000</p>
+                                </div>
+                            </div>
+                            <hr class="m-0 p-0">
+                            <div class="row">
+                                <div class="col-9 border-end border-dark">
+                                    <p class="text-end">Biaya layanan</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-end">Rp1.000</p>
+                                </div>
+                            </div>
+                            <hr class="m-0 p-0">
+                            <div class="row">
+                                <div class="col-9 border-end border-dark">
+                                    <p class="text-end">Biaya Penanganan</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-end">Rp1.000</p>
+                                </div>
+                            </div>
+                            <hr class="m-0 p-0">
+                            <div class="row">
+                                <div class="col-9 border-end border-dark">
+                                    <p class="text-end">Total Pesanan</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-end">
+                                        Rp
+                                        <?php echo number_format($p['total_harga'] + 10000, 0, '.', '.'); ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr class="mt-0 pt-0">
+                            <a href="<?= base_url('Pemesanan/updatePemesanan/') . $p['id_pemesanan']; ?>"
+                                class="btn btn-warning text-dark"><i class="fas fa-edit"></i>
+                                <?php
+                                if ($p['status'] == 1) {
+                                    echo "Ingatkan";
+                                } else if ($p['status'] == 2) {
+                                    echo "Kirimkan";
+                                } else if ($p['status'] == 3) {
+                                    echo "Menunggu Konfirmasi";
+                                } else {
+                                    echo "Selesai";
+                                }
+                                ?>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
 <!-- Recent Sales End -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -112,146 +286,3 @@
         });
     });
 </script>
-
-<!-- Modal Tambah gadget baru-->
-<div class="modal fade" id="gadgetBaruModal" tabindex="-1" role="dialog" aria-labelledby="gadgetBaruModalLabel"
-    ariahidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content bg-secondary">
-            <div class="modal-header">
-                <h5 class="modal-title" id="gadgetBaruModalLabel">Tambah Gadget</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="<?= base_url('gadget'); ?>" method="post" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <input type="text" class="form-control form-control-user" id="nama_gadget" name="nama_gadget"
-                            placeholder="Masukkan Nama Gadget">
-                    </div>
-                    <div class="form-group mb-3">
-                        <select name="id_merek" id="id_merek" class="form-select mb-3">
-                            <option value="">Pilih Merek</option>
-                            <?php
-                            foreach ($merek as $m) { ?>
-                                <option value="<?= $m['id_merek']; ?>">
-                                    <?= $m['nama_merek']; ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <select name="tahun_rilis" id="tahun_rilis" class="form-select mb-3">
-                            <option value="">Pilih Tahun</option>
-                            <?php
-                            for ($i = date('Y'); $i > 1000; $i--) { ?>
-                                <option value="<?= $i; ?>">
-                                    <?= $i; ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control bg-dark" id="image" name="image">
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="text" class="form-control form-control-user" id="stok" name="stok"
-                            placeholder="Masukkan nominal stok">
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="text" class="form-control form-control-user" id="harga" name="harga"
-                            placeholder="Masukkan nominal harga">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-ban"></i>
-                        Close</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- End of Modal Tambah Mneu -->
-
-<!-- Modal Ubah gadget baru-->
-<?php
-foreach ($gadget as $g) { ?>
-    <div class="modal fade" id="gadgetUbahModal<?php echo $g['id_gadget']; ?>" tabindex="-1" role="dialog"
-        aria-labelledby="gadgetUbahModalLabel" ariahidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content bg-secondary">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="gadgetUbahModalLabel">Ubah Gadget</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="<?= base_url('gadget/ubahgadget/') . $g['id_gadget']; ?>" method="post"
-                    enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <input type="text" class="form-control form-control-user" id="nama_gadget" name="nama_gadget"
-                                placeholder="Masukkan Nama Gadget" value="<?= $g['nama_gadget']; ?>">
-                        </div>
-                        <div class="form-group mb-3">
-                            <select name="id_merek" id="id_merek" class="form-select mb-3">
-                                <option value="<?= $g['id_merek'] ?>">
-                                    <?= $g['nama_merek']; ?>
-                                </option>
-                                <?php
-                                foreach ($merek as $m) {
-                                    // Check if the option value matches the initially selected value, skip if true
-                                    if ($m['id_merek'] !== $g['id_merek']) {
-                                        ?>
-                                        <option value="<?= $m['id_merek']; ?>">
-                                            <?= $m['nama_merek']; ?>
-                                        </option>
-                                        <?php
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <select name="tahun_rilis" id="tahun_rilis" class="form-select mb-3">
-                                <option value="<?= $g['tahun_rilis']; ?>">
-                                    <?= $g['tahun_rilis']; ?>
-                                </option>
-                                <?php
-                                $selected_value = $g['tahun_rilis'];
-                                for ($i = date('Y'); $i > 1000; $i--) {
-                                    if ($i != $selected_value) {
-                                        ?>
-                                        <option value="<?= $i; ?>">
-                                            <?= $i; ?>
-                                        </option>
-                                    <?php }
-                                } ?>
-                            </select>
-                        </div>
-                        <div class="input-group mb-3">
-                            <input type="hidden" name="old_pict" id="old_pict" value="<?= $g['image']; ?>">
-                            <input type="file" class="form-control bg-dark" id="image" name="image" accept="image/*">
-                        </div>
-                        <div class="form-group mb-3">
-                            <input type="text" class="form-control form-control-user" id="stok" name="stok"
-                                placeholder="Masukkan nominal stok" value="<?= $g['stok']; ?>">
-                        </div>
-                        <div class="form-group mb-3">
-                            <input type="text" class="form-control form-control-user" id="harga" name="harga"
-                                placeholder="Masukkan nominal harga" value="<?= $g['harga']; ?>">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-ban"></i>
-                            Close</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-<?php } ?>
-<!-- End of Modal Tambah Mneu -->
