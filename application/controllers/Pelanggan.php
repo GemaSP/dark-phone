@@ -36,13 +36,13 @@ class Pelanggan extends CI_Controller
                     $this->session->set_userdata($data);
                     if ($user['role_id'] == 2) {
                         // Redirect sesuai kebutuhan setelah login berhasil
-                        echo json_encode(array('success' => true, 'redirect' => 'home'));
+                        echo json_encode(array('success' => true, 'redirect' => '/dark-phone/home'));
                     } else {
-                        echo json_encode(array('success' => true, 'redirect' => 'home'));
+                        echo json_encode(array('success' => true, 'redirect' => '/dark-phone/home'));
                     }
                 } else {
                     // Password salah
-                    echo json_encode(array('success' => false, 'message' => 'Password salah!!'));
+                    echo json_encode(array('success' => false, 'message' => '<div id="error-message" class="alert alert-danger alert-message" role="alert">Password Salah!!</div>'));
                 }
             } else {
                 // Jika user belum aktif
@@ -60,7 +60,7 @@ class Pelanggan extends CI_Controller
             }
         } else {
             // Email tidak terdaftar
-            echo json_encode(array('success' => false, 'message' => 'Email tidak terdaftar!!'));
+            echo json_encode(array('success' => false, 'message' => '<div id="error-message" class="alert alert-danger alert-message" role="alert">Email tidak terdaftar</div>'));
         }
     }
     public function registrasi()
@@ -121,7 +121,13 @@ class Pelanggan extends CI_Controller
             $this->db->insert('user_token', $user_token);
 
             $this->_sendEmail($token, 'verify');
-
+            $data = array(
+                'notifikasi' => 'User baru ditambahkan',
+                'waktu' => time(),
+                // dan kolom lainnya sesuai dengan struktur tabel
+            );
+            
+            $this->db->insert('notifikasi', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
             redirect('home');
         }
@@ -191,7 +197,7 @@ class Pelanggan extends CI_Controller
 
     public function logout()
     {
-        $this->session->unset_userdata('email');
+        $this->session->unset_userdata(['id', 'email', 'username', 'role_id']);
         $this->session->set_flashdata('pesan',
             '<div class="alert alert-success alert-message" role="alert">
             Anda Berhasil Logout!!

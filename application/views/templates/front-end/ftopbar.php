@@ -43,7 +43,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="<?= base_url('akun'); ?>">Akun Saya</a></li>
-                <li><a class="dropdown-item" href="<?= base_url('akun/pesanan'); ?>">Pesanan Saya</a></li>
+                <li><a class="dropdown-item" href="<?= base_url('pesanan'); ?>">Pesanan Saya</a></li>
                 <li><a class="dropdown-item" href="<?= base_url('pelanggan/logout'); ?>">Logout</a></li>
             </ul>
         </div>

@@ -57,6 +57,14 @@ class Akun extends CI_Controller
             $this->db->set('username', $username);
             $this->db->where('email', $email);
             $this->db->update('user');
+
+            $data = array(
+                'notifikasi' => 'User Merubah Profil',
+                'waktu' => time(),
+                // dan kolom lainnya sesuai dengan struktur tabel
+            );
+            
+            $this->db->insert('notifikasi', $data);
             $this->session->set_flashdata('pesan',
                 '<div class="alert alert-success alert-message" role="alert">
             Profil Berhasil diubah
@@ -116,6 +124,13 @@ class Akun extends CI_Controller
                     $this->db->set('password', $password_hash);
                     $this->db->where('email', $this->session->userdata('email'));
                     $this->db->update('user');
+                    $data = array(
+                        'notifikasi' => 'User Merubah Password',
+                        'waktu' => time(),
+                        // dan kolom lainnya sesuai dengan struktur tabel
+                    );
+                    
+                    $this->db->insert('notifikasi', $data);
                     $this->session->set_flashdata('pesan',
                         '<div class="alert alert-success alert-message" role="alert">
                             Password berhasil diubah

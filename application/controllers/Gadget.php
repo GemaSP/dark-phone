@@ -16,12 +16,18 @@ class Gadget extends CI_Controller
         $data['judul'] = 'Data Gadget';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
         $data['gadget'] = $this->ModelGadget->getGadget()->result_array();
-        
+        $notifikasi = $this->ModelUser->notifikasi();
+        $data['notifikasi'] = array_reverse($notifikasi);
+        $jumlah_data = $this->ModelUser->getJumlahNotifikasi();
+        $data['jumlah_data'] = $jumlah_data;
+        $komentar = $this->ModelUser->komentar();
+        $data['komentar'] = array_reverse($komentar);
+
         $this->form_validation->set_rules('nama_gadget', 'Nama Gadget', 'required|min_length[3]', [
             'required' => 'Judul Gadget harus diisi',
             'min_length' => 'Judul Gadget terlalu pendek'
         ]);
-        
+
         $this->form_validation->set_rules('stok', 'Stok', 'required|numeric', [
             'required' => 'Stok harus diisi',
             'numeric' => 'Yang anda masukan bukan angka'
@@ -42,11 +48,11 @@ class Gadget extends CI_Controller
         $this->load->library('upload', $config);
 
         if ($this->form_validation->run() == false) {
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('gadget/index', $data);
-        $this->load->view('templates/footer');
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('gadget/index', $data);
+            $this->load->view('templates/footer');
         } else {
             if ($this->upload->do_upload('image')) {
                 $image = $this->upload->data();
@@ -74,21 +80,21 @@ class Gadget extends CI_Controller
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
         $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->result_array();
         $merek = $this->ModelGadget->joinMerekGadget(['gadget.id_gadget' =>
-       
-        $this->uri->segment(3)])->result_array();
- 
+
+            $this->uri->segment(3)])->result_array();
+
         foreach ($merek as $g) {
             $data['id'] = $g['id_merek'];
 
             $data['k'] = $g['nama_merek'];
         }
         $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-        
+
         $this->form_validation->set_rules('nama_gadget', 'Nama Gadget', 'required|min_length[3]', [
             'required' => 'Judul Gadget harus diisi',
             'min_length' => 'Judul Gadget terlalu pendek'
         ]);
-        
+
         $this->form_validation->set_rules('stok', 'Stok', 'required|numeric', [
             'required' => 'Stok harus diisi',
             'numeric' => 'Yang anda masukan bukan angka'
@@ -98,7 +104,7 @@ class Gadget extends CI_Controller
             'numeric' => 'Yang anda masukan bukan angka'
         ]);
 
-        
+
         //konfigurasi sebelum gambar diupload
         $config['upload_path'] = './assets/back-end/img/upload/';
         $config['allowed_types'] = 'jpg|png|jpeg';
@@ -134,12 +140,12 @@ class Gadget extends CI_Controller
             redirect('gadget');
         }
     }
-    
+
     public function searchGadget()
     {
         $searchText = $this->input->post('searchText');
         $data['gadget'] = $this->ModelGadget->searchGadget($searchText);
-        
+
         $this->load->view('gadget/tabel_gadget', $data);
     }
 
@@ -155,6 +161,13 @@ class Gadget extends CI_Controller
         $data['judul'] = 'Merek Gadget';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
         $data['merek'] = $this->ModelGadget->getMerek()->result_array();
+        $notifikasi = $this->ModelUser->notifikasi();
+        $data['notifikasi'] = array_reverse($notifikasi);
+        $jumlah_data = $this->ModelUser->getJumlahNotifikasi();
+        $data['jumlah_data'] = $jumlah_data;
+        $komentar = $this->ModelUser->komentar();
+        $data['komentar'] = array_reverse($komentar);
+
         $this->form_validation->set_rules('nama_merek', 'Merek', 'required', [
             'required' => 'Nama Merek harus diisi'
         ]);
@@ -204,15 +217,18 @@ class Gadget extends CI_Controller
     {
         $searchText = $this->input->post('searchText');
         $data['merek'] = $this->ModelGadget->searchMerek($searchText);
-        
+
         $this->load->view('gadget/tabel_merek', $data);
     }
-    
+
     public function hapusMerek()
     {
         $where = ['id_merek' => $this->uri->segment(3)];
         $this->ModelGadget->hapusMerek($where);
         redirect('gadget/merek');
     }
+
+
+
+
 }
-       

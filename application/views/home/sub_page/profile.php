@@ -47,14 +47,14 @@
                                     Alamat
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a href="<?= base_url('akun/keranjang'); ?>" class="nav-link text-white">
                                     <svg class="bi me-2" width="16" height="16">
                                         <use xlink:href="#grid"></use>
                                     </svg>
                                     Keranjang
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a href="<?= base_url('pesanan'); ?>" class="nav-link text-white">
                                     <svg class="bi me-2" width="16" height="16">

@@ -148,6 +148,19 @@ class ModelGadget extends CI_Model
         return $this->db->get();
     }
 
+    public function searchPemesanan($searchText)
+    {
+        $this->db->from('pemesanan');
+        $this->db->join('gadget', 'pemesanan.id_gadget = gadget.id_gadget');
+        $this->db->join('user', 'pemesanan.id = user.id');
+        $this->db->join('detail_user', 'pemesanan.id_alamat = detail_user.id_alamat');
+        $this->db->like('user.username', $searchText);
+        $this->db->or_like('gadget.nama_gadget', $searchText);
+        $this->db->or_like('id_pemesanan', $searchText);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     //Mendapatkan data Transaksi
     public function getTransaksi()
     {

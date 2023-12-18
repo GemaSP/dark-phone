@@ -23,4 +23,26 @@ class ModelUser extends CI_Model
         $this->db->where('role_id', 2);
         return $this->db->count_all_results();
     }
+
+    public function notifikasi()
+    {
+        return $this->db->get('notifikasi')->result_array();
+    }
+
+    public function getJumlahNotifikasi()
+    {
+        $this->db->from('notifikasi');
+        return $this->db->count_all_results();
+    }
+
+    public function komentar()
+    {
+        return $this->db->get('komentar')->result_array();
+    }
+
+    public function getJumlahKomentar()
+    {
+        $this->db->from('komentar');
+        return $this->db->count_all_results();
+    }
 }

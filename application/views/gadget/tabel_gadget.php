@@ -23,14 +23,14 @@
             <td>
                 <picture>
                     <source srcset="" type="image/svg+xml">
-                    <img width="100" src="<?= base_url('assets/img/upload/') . $g['img'];?>" class="img-fluid img-thumbnail" alt="...">
+                    <img width="100" src="<?= base_url('assets/back-end/img/upload/') . $g['img'];?>" class="img-fluid img-thumbnail" alt="...">
                 </picture>
             </td>
             <td><?= $g['stok']; ?></td>
             <td><?= $g['harga']; ?></td>
             <td>
-                <a href="<?= base_url('gadget/ubahgadget/').$g['id'];?>" class="badge bg-warning text-dark"><i class="fas fa-edit"></i> Ubah</a>
-                <a href="<?= base_url('gadget/hapusgadget/').$g['id'];?>" onclick="return confirm('Kamu yakin akan menghapus <?= $g['nama_gadget'];?> ?');" class="badge bg-primary"><i class="fas fa-trash"></i> Hapus</a>
+                <a href="<?= base_url('gadget/ubahgadget/').$g['id_gadget'];?>" class="badge bg-warning text-dark"><i class="fas fa-edit"></i> Ubah</a>
+                <a href="<?= base_url('gadget/hapusgadget/').$g['id_gadget'];?>" onclick="return confirm('Kamu yakin akan menghapus <?= $g['nama_gadget'];?> ?');" class="badge bg-primary"><i class="fas fa-trash"></i> Hapus</a>
             </td>
         </tr>
         <?php } ?>

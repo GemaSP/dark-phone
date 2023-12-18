@@ -15,6 +15,13 @@ class Admin extends CI_Controller
         $data['judul'] = 'Dashboard';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
         $data['transaksi'] = $this->ModelGadget->getTransaksi()->result_array();
+        $notifikasi = $this->ModelUser->notifikasi();
+        $data['notifikasi'] = array_reverse($notifikasi);
+        $jumlah_data = $this->ModelUser->getJumlahNotifikasi();
+        $data['jumlah_data'] = $jumlah_data;
+        $komentar = $this->ModelUser->komentar();
+        $data['komentar'] = array_reverse($komentar);
+
 
         //Mengambil data dengan Memanggil Model
         $jumlah_user = $this->ModelUser->getJumlahPelanggan();

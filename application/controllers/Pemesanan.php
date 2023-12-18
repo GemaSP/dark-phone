@@ -18,6 +18,13 @@ class Pemesanan extends CI_Controller
         $data['gadget'] = $this->ModelGadget->getGadget()->result_array();
         $data['merek'] = $this->ModelGadget->getMerek()->result_array();
         $data['pemesanan'] = $this->ModelGadget->getPesanan()->result_array();
+        $notifikasi = $this->ModelUser->notifikasi();
+        $data['notifikasi'] = array_reverse($notifikasi);
+        $jumlah_data = $this->ModelUser->getJumlahNotifikasi();
+        $data['jumlah_data'] = $jumlah_data;
+        $komentar = $this->ModelUser->komentar();
+        $data['komentar'] = array_reverse($komentar);
+
         
 
         $this->load->view('templates/header', $data);
@@ -57,7 +64,13 @@ class Pemesanan extends CI_Controller
         $data['gadget'] = $this->ModelGadget->getGadget()->result_array();
         $data['merek'] = $this->ModelGadget->getMerek()->result_array();
         $data['transaksi'] = $this->ModelGadget->getTransaksi()->result_array();
-        
+        $notifikasi = $this->ModelUser->notifikasi();
+        $data['notifikasi'] = array_reverse($notifikasi);
+        $jumlah_data = $this->ModelUser->getJumlahNotifikasi();
+        $data['jumlah_data'] = $jumlah_data;
+        $komentar = $this->ModelUser->komentar();
+        $data['komentar'] = array_reverse($komentar);
+
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
@@ -66,4 +79,12 @@ class Pemesanan extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-}
+    public function searchpemesanan()
+    {
+        $searchText = $this->input->post('searchText');
+        $data['pemesanan'] = $this->ModelGadget->searchPemesanan($searchText);
+        
+        $this->load->view('pemesanan/table_pemesanan', $data);
+    }
+
+    }

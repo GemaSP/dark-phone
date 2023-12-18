@@ -1,6 +1,6 @@
 <!-- Recent Sales Start -->
 <div class="container-fluid pt-2 px-4">
-    <h1 class="">Data Gadget</h1>
+    <h1 class="">Data Pemesanan</h1>
     <div class="bg-secondary text-center rounded p-4">
         <?php if (validation_errors()) { ?>
             <div class="alert alert-danger" role="alert">
@@ -9,9 +9,7 @@
         <?php } ?>
         <?= $this->session->flashdata('pesan'); ?>
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <a href="" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#gadgetBaruModal"><i
-                    class="fas fa-file-alt"></i> Tambah Gadget</a>
-
+            <a></a>
             <form class="d-none d-md-flex ms-4">
                 <input id="searchInput" class="form-control bg-dark border-0" type="search" placeholder="Search">
             </form>
@@ -72,7 +70,7 @@
     </div>
 </div>
 
-<!-- Modal Ubah gadget baru-->
+<!-- Modal detail pemesanan-->
 <?php
 foreach ($pemesanan as $p) { ?>
     <div class="modal fade" id="detailPemesananModal<?php echo $p['id_pemesanan']; ?>" tabindex="-1" role="dialog"
@@ -276,7 +274,7 @@ foreach ($pemesanan as $p) { ?>
             var searchText = $(this).val().trim();
 
             $.ajax({
-                url: '<?= base_url('gadget/searchgadget'); ?>',
+                url: '<?= base_url('pemesanan/searchPemesanan'); ?>',
                 method: 'POST',
                 data: { searchText: searchText },
                 success: function (response) {

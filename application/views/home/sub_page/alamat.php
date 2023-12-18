@@ -45,14 +45,14 @@
                   Alamat
                 </a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="<?= base_url('akun/keranjang'); ?>" class="nav-link text-white">
                   <svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#grid"></use>
                   </svg>
                   Keranjang
                 </a>
-              </li>
+              </li> -->
               <li>
                 <a href="<?= base_url('pesanan'); ?>" class="nav-link text-white">
                   <svg class="bi me-2" width="16" height="16">
@@ -104,7 +104,7 @@
             <?php foreach ($detail_user as $alamat): ?>
               <div class="card-body bg-dark" id="row_<?= $alamat['id_alamat']; ?>">
                 <h6>Alamat:</h6>
-                <article class="card bg-dark">
+                <article class="card bg-secondary">
                   <div class="card-body row">
                     <div class="col-3 border-end">
                       <strong>

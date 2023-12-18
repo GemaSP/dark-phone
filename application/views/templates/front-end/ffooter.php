@@ -135,7 +135,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form login -->
-                <div id="error-message" class="alert alert-danger alert-message" role="alert"></div>
+                <div id="error-message"></div>
                 <form id="form-login" method="post" action="<?= base_url('pelanggan'); ?>">
                     <!-- Isi dengan form login yang sesuai -->
                     <div class="mb-3">
@@ -210,5 +210,4 @@ $('#loginModal').on('shown.bs.modal', function () {
 });
 </script>
 </body>
-
 </html>

@@ -135,9 +135,6 @@ class ModelHome extends CI_Model
         return $this->db->insert_id(); // Mengembalikan ID dari data yang disimpan jika diperlukan
     }
     
-    
-
-    
     public function pemesananWhere($where)
     {
         $this->db->select('pemesanan.*, user.*, gadget.*');
@@ -166,7 +163,6 @@ class ModelHome extends CI_Model
     }
     public function getAlamat($id)
     {
-        // Ganti 'detail_user' dengan nama tabel yang sesuai
         $this->db->where('id', $id);
         $this->db->where('state', 1);
         $query = $this->db->get('detail_user');
@@ -176,7 +172,6 @@ class ModelHome extends CI_Model
 
     public function getAlamat1($user_id)
     {
-        // Ganti 'detail_user' dengan nama tabel yang sesuai
         $this->db->select('id_alamat');
         $this->db->from('detail_user');
         $this->db->where('id', $user_id);

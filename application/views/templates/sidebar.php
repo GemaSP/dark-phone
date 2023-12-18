@@ -49,27 +49,22 @@
                             <a href="<?= base_url('gadget/merek'); ?>" class="dropdown-item">Merek Gadget</a>
                             <a href="<?= base_url('gadget'); ?>" class="dropdown-item">Data Gadget</a>
                             <a href="<?= base_url('user/anggota'); ?>" class="dropdown-item">Data User</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                                class="fa fa-laptop me-2"></i>Data Pemesanan</a>
+                        <div class="dropdown-menu bg-transparent border-0">
                             <a href="<?= base_url('pemesanan'); ?>" class="dropdown-item">Data Pemesanan</a>
                             <a href="<?= base_url('pemesanan/transaksi'); ?>" class="dropdown-item">Data Transaksi</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="fa fa-laptop me-2"></i>Data Report</a>
+                                class="fa fa-laptop me-2"></i>Data Lainnya</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="<?= base_url('gadget/merek'); ?>" class="dropdown-item">Merek Gadget</a>
-                            <a href="<?= base_url('gadget'); ?>" class="dropdown-item">Data Gadget</a>
-                            <a href="<?= base_url('user/anggota'); ?>" class="dropdown-item">Data User</a>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="far fa-file-alt me-2"></i>Pages</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                            <!-- <a href="<?= base_url('notifikasi'); ?>" class="dropdown-item">Data Notifikasi</a>
+                            <a href="<?= base_url('notifikasi/komentar'); ?>" class="dropdown-item">Data Komentar</a> -->
                         </div>
                     </div>
                 </div>

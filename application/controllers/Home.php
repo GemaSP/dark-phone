@@ -3,11 +3,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Home extends CI_Controller
 {
+    public function _remap($method, $params = array()) {
+        if (method_exists($this, $method)) {
+            return call_user_func_array(array($this, $method), $params);
+        } else {
+            redirect('home');
+        }
+    }
+
     public function index()
     {
         //Mengambil data dari database menggunakan Model
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['gadget'] = $this->ModelGadget->getGadget()->result_array();
+        $data['gadget'] = $this->ModelGadget->gadgetWhere(['stok >' => 0])->result_array();
         $data['merek'] = $this->ModelGadget->getMerek()->result_array();
 
         $jumlah_data = $this->ModelHome->getJumlahData($this->session->userdata('id'));
