@@ -66,7 +66,6 @@ class Pelanggan extends CI_Controller
     public function registrasi()
     {
         if ($this->session->userdata('email')) {
-            redirect('home');
         }
         //membuat rule untuk inputan nama agar tidak boleh kosong dengan membuat pesan error dengan
         //bahasa sendiri yaitu 'Nama Belum diisi'

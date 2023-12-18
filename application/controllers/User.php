@@ -157,6 +157,7 @@ class User extends CI_Controller
                         '<div class="alert alert-danger alert-message" role="alert">
                         Password baru tidak boleh sama dengan password lama
                         </div>');
+                        redirect('user/changePassword');
                         } else {
                             // password sudah ok
                             $password_hash = password_hash($new_password, PASSWORD_DEFAULT);

@@ -5,9 +5,9 @@ class Autentifikasi extends CI_Controller
 {
     public function index()
     {
-        //jika statusnya sudah login, maka tidak bisa mengakses halaman login alias dikembalikan ke tampilan user
-        if($this->session->userdata('email')) {
-            redirect('admin'); 
+        //jika statusnya sudah login, maka tidak bisa mengakses halaman login alias dikembalikan ke tampilan admin
+        if ($this->session->userdata('email')) {
+            redirect('admin');
         }
         $this->form_validation->set_rules('email', 'Alamat Email', 'required|trim|valid_email', [
             'required' => 'Email Harus diisi!!',
@@ -33,7 +33,7 @@ class Autentifikasi extends CI_Controller
         $email = htmlspecialchars($this->input->post('email', true));
         $password = $this->input->post('password', true);
 
-        $user = $this->ModelUser->cekData(['email' => $email])->row_array();  
+        $user = $this->ModelUser->cekData(['email' => $email])->row_array();
         //jika usernya ada
         if ($user) {
             //jiks user sudah aktif
@@ -61,20 +61,18 @@ class Autentifikasi extends CI_Controller
                     redirect('autentifikasi');
                 }
             } else {
-                 // siapkan token
-            $email = $this->input->post('email', true);
-            $token = base64_encode(random_bytes(32));
-            $user_token = [
-                'email' => $email,
-                'token' => $token,
-                'date_created' => time()
-            ];
+                // siapkan token
+                $email = $this->input->post('email', true);
+                $token = base64_encode(random_bytes(32));
+                $user_token = [
+                    'email' => $email,
+                    'token' => $token,
+                    'date_created' => time()
+                ];
 
-            $this->db->insert('user_token', $user_token);
+                $this->db->insert('user_token', $user_token);
 
-            $this->_sendEmail($token, 'verify');
-
-                
+                $this->_sendEmail($token, 'verify');
             }
         } else {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Email tidak terdaftar!!</div>');
@@ -140,7 +138,7 @@ class Autentifikasi extends CI_Controller
 
             $this->_sendEmail($token, 'verify');
 
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Selamat! akunmu berhasil dibuat. Mohon periksa Email untuk aktivasi akunmu</div>');
             redirect('autentifikasi');
         }
     }
@@ -188,7 +186,7 @@ class Autentifikasi extends CI_Controller
 
                     $this->db->delete('user_token', ['email' => $email]);
 
-                    $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">' . $email . ' has been activated! Please login.</div>');
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">' . $email . ' sudah di aktivasi! Please login.</div>');
                     redirect('autentifikasi');
                 } else {
                     $this->db->delete('user', ['email' => $email]);

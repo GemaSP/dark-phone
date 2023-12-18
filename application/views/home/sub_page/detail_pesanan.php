@@ -8,7 +8,42 @@
                 </h6>
                 <article class="card">
                     <div class="card-body row">
-                        <div class="col"> <strong>Perkiraan waktu sampai:</strong> <br>29 nov 2019 </div>
+                    <?php if ($pemesanan['status'] == 2 ): ?>
+                        <div class="col"> <strong>Perkiraan waktu dikirim:</strong> <br>
+                        <?php
+                           $timestamp = $pemesanan['tanggal_pesan'];
+                           $tanggalTambahTigaHari = strtotime('+1 days', $timestamp);
+                           $tanggalBaru = date('d M Y', $tanggalTambahTigaHari);
+                           
+                           echo $tanggalBaru;
+                            ?>
+                            
+                            </div>
+                        <?php elseif ($pemesanan['status'] == 3): ?>
+                            <div class="col"> <strong>Perkiraan waktu sampai:</strong> <br>
+                            <?php
+                           $timestamp = $pemesanan['tanggal_pesan'];
+                           $tanggalTambahTigaHari = strtotime('+3 days', $timestamp);
+                           $tanggalBaru = date('d M Y', $tanggalTambahTigaHari);
+                           
+                           echo $tanggalBaru;
+                            ?>
+                        </div>
+                        <?php elseif ($pemesanan['status'] == 4): ?>
+                            <div class="col"> <strong>Tanggal diterima:</strong> <br>
+                            <?=date('d M Y', $pemesanan['tanggal_diterima']);
+                            ?>
+                        </div>
+                        <?php elseif ($pemesanan['status'] == 5): ?>
+                            <div class="col"> <strong>Tanggal pembatalan:</strong> <br>
+                            <?=date('d M Y', $pemesanan['tanggal_pesan']);
+                            ?>
+                        </div>
+                            <?php else: ?>
+                            
+                    
+                            <?php endif; ?>
+                        
                         <div class="col"> <strong>Dikirim oleh:</strong> <br> DARKPHONE, | <i class="fa fa-phone"></i>
                             +123456789 </div>
                         <div class="col">
@@ -29,7 +64,7 @@
                 </article>
                 <?php if ($pemesanan['status'] == 1): ?>
                     <div class="track">
-                        <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                        <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
                                 class="text">Pesanan dibuat</span> </div>
                         <div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">
                                 Pesanan dikemas</span> </div>
@@ -79,7 +114,7 @@
                 <ul class="row">
                     <div class="row align-items-center mb-3">
                         <div class="col-auto">
-                            <img src="<?= base_url('assets/back-end/img/upload/') . $pemesanan['image']; ?>"
+                            <img src="<?= base_url('assets/back-end/img/upload/') . $pemesanan['img']; ?>"
                                 alt="Produk" class="img-fluid" style="max-width: 100px;">
                         </div>
                         <div class="col">

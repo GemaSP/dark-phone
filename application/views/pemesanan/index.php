@@ -52,7 +52,7 @@
                                 } else if ($p['status'] == 4) {
                                     echo "Diterima";
                                 } else if ($p['status'] == 5) {
-                                    echo "Dikembalikan";
+                                    echo "Dibatalkan";
                                 } else {
                                     echo "";
                                 }

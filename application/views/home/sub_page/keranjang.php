@@ -25,7 +25,7 @@
                         <hr>
                         <ul class="nav nav-pills flex-column mb-auto">
                             <li class="nav-item">
-                                <a href="<?= base_url('akun/profile'); ?>" class="nav-link text-white"
+                                <a href="<?= base_url('akun'); ?>" class="nav-link text-white"
                                     aria-current="page">
                                     <svg class="bi me-2" width="16" height="16">
                                         <use xlink:href="#home"></use>
@@ -58,7 +58,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= base_url('akun/pesanan'); ?>" class="nav-link text-white">
+                                <a href="<?= base_url('pesanan'); ?>" class="nav-link text-white">
                                     <svg class="bi me-2" width="16" height="16">
                                         <use xlink:href="#people-circle"></use>
                                     </svg>

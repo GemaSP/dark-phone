@@ -14,17 +14,21 @@ class Admin extends CI_Controller
     {
         $data['judul'] = 'Dashboard';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['anggota'] = $this->ModelUser->getUserLimit()->result_array();
         $data['transaksi'] = $this->ModelGadget->getTransaksi()->result_array();
-        $jumlah_user = $this->ModelUser->getJumlahPelanggan(); // Mengambil jumlah data dari model
+
+        //Mengambil data dengan Memanggil Model
+        $jumlah_user = $this->ModelUser->getJumlahPelanggan();
         $total_stok = $this->ModelGadget->totalStok();
         $subtotal = $this->ModelGadget->totalPenghasilan();
         $jumlah_transaksi = $this->ModelGadget->getJumlahTransaksi();
+
+        //Memuat Variabel yg akan ditampilkan di View
         $data['jumlah_user'] = $jumlah_user;
         $data['total_stok'] = $total_stok;
         $data['total_penghasilan'] = $subtotal;
         $data['jumlah_transaksi'] = $jumlah_transaksi;
 
+        //Menampilkan View
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);

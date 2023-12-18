@@ -29,10 +29,10 @@
                     <?= $gadget['nama_merek']; ?> adalah kombinasi sempurna antara gaya, keandalan, dan inovasi."
                 </p>
                 <div class="btn-groups">
-                    <button type="button" class="add-cart-btn"><i class="fas fa-shopping-cart"></i>add to cart</button>
+                    <button type="button" class="add-cart-btn addcart"><i class="fas fa-shopping-cart"></i>add to cart</button>
                     <button id="buynow"
-                        onclick="window.location.href='<?= base_url('home/buyNow/') . $gadget['id_gadget']; ?>';"
-                        type="button" class="buy-now-btn"><i class="fas fa-wallet"></i>buy now</button>
+                        
+                        type="button" class="buy-now-btn buynow"><i class="fas fa-wallet"></i>buy now</button>
                 </div>
             </div>
         </div>
@@ -58,3 +58,59 @@
     </div>
 </section>
 <!-- end of about us -->
+<script>
+function sessionExists() {
+    return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    resolve(response.isLoggedIn);
+                } else {
+                    reject(xhr.status);
+                }
+            }
+        };
+        xhr.open('GET', '/dark-phone/home/checkSessionStatus', true);
+        xhr.send();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var button = document.querySelector('.buynow');
+
+    button.addEventListener('click', function() {
+        var gadgetID = this.getAttribute('data-id-gadget');
+        sessionExists().then(function(isLoggedIn) {
+            if (!isLoggedIn) {
+                var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                errorModal.show();
+            } else {
+                window.location.href = '<?= base_url('home/buynow/').$gadget['id_gadget']; ?>';
+                // ...
+            }
+        }).catch(function(error) {
+            console.error('Terjadi kesalahan: ' + error);
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var button = document.querySelector('.addcart');
+
+    button.addEventListener('click', function() {
+        var gadgetID = this.getAttribute('data-id-gadget');
+        sessionExists().then(function(isLoggedIn) {
+            if (!isLoggedIn) {
+                var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                errorModal.show();
+            } else {
+                window.location.href = '<?= base_url('home/buynow/').$gadget['id_gadget']; ?>';
+                // ...
+            }
+        }).catch(function(error) {
+            console.error('Terjadi kesalahan: ' + error);
+        });
+    });
+});
+</script>

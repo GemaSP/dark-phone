@@ -20,12 +20,11 @@
                                     <?= $user['username']; ?>
                                 </h6>
                             </div>
-
                         </a>
                         <hr>
                         <ul class="nav nav-pills flex-column mb-auto">
                             <li class="nav-item">
-                                <a href="<?= base_url('akun/profile'); ?>" class="nav-link text-white" aria-current="page">
+                                <a href="<?= base_url('akun'); ?>" class="nav-link text-white" aria-current="page">
                                     <svg class="bi me-2" width="16" height="16">
                                         <use xlink:href="#home"></use>
                                     </svg>
@@ -57,7 +56,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= base_url('akun/pesanan'); ?>" class="nav-link text-white">
+                                <a href="<?= base_url('pesanan'); ?>" class="nav-link text-white">
                                     <svg class="bi me-2" width="16" height="16">
                                         <use xlink:href="#people-circle"></use>
                                     </svg>
@@ -81,7 +80,7 @@
             <div class="product-div-right bg-dark">
                 <div class="rounded h-100 p-4">
                     <h6 class="mb-4">Ubah Profile</h6>
-                    <?= form_open_multipart('home/ubahprofil'); ?>
+                    <?= form_open_multipart('akun'); ?>
                     <div class="row mb-3">
                         <label for="email" class="col-sm-3 col-form-label">Email</label>
                         <div class="col-sm-9">
@@ -107,7 +106,7 @@
                                         width="150" class="imgthumbnail" alt="">
                                 </div>
                                 <div class="mb-3">
-                                    <input type="file" class="form-control bg-dark" id="image" name="image"
+                                    <input type="file" class="form-control" id="image" name="image"
                                         accept="image/*" onchange="updatePreview(this, 'image-preview')">
                                 </div>
                             </div>
@@ -126,3 +125,16 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function updatePreview(input, target) {
+        let file = input.files[0];
+        let reader = new FileReader();
+        
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            let img = document.getElementById(target);
+            // can also use "this.result"
+            img.src = reader.result;
+        }
+    }
+</script>

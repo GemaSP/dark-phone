@@ -3,18 +3,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Keranjang extends CI_Controller
 {
-
+    public function __construct()
+    {
+        parent::__construct();
+        cek_loginpelanggan();
+    }
+    
     public function index()
     {
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-        $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
-        $keranjang = $this->ModelGadget->keranjangWhere(['keranjang.id' => $this->session->userdata('id')])->result_array();
+        $keranjang = $this->ModelHome->keranjangWhere(['keranjang.id' => $this->session->userdata('id')])->result_array();
         $reversed_keranjang = array_reverse($keranjang);
         $data['keranjang'] = $reversed_keranjang;
-        $jumlah_data = $this->ModelGadget->getJumlahData($this->session->userdata('id')); // Mengambil jumlah data dari model
-        $data['jumlah_data'] = $jumlah_data;
 
+        $jumlah_data = $this->ModelHome->getJumlahData($this->session->userdata('id')); // Mengambil jumlah data dari model
+        $data['jumlah_data'] = $jumlah_data;
 
         $this->load->view('templates/front-end/fheader', $data);
         $this->load->view('templates/front-end/ftopbar', $data);
@@ -27,22 +30,13 @@ class Keranjang extends CI_Controller
         $id = $this->input->post('id_gadget');
         $jumlah_barang = $this->input->post('jumlah_barang');
 
-        // Lakukan validasi data jika diperlukan
-
-        // Perbarui nilai jumlah_barang di database
-        $this->ModelGadget->updateJumlahBarang($id, $jumlah_barang);
+        $this->ModelHome->updateJumlahBarang($id, $jumlah_barang);
     }
 
     public function delete_row()
     {
         $id = $this->input->post('id'); // Ambil ID yang dikirim dari AJAX
-
-        // Lakukan penghapusan dari database sesuai dengan ID yang diterima
-        // Gantilah dengan operasi penghapusan pada database Anda sesuai kebutuhan
-
-        // Contoh operasi penghapusan:
-        // Ganti 'Model_name' dengan nama model Anda
-        $deleted = $this->ModelGadget->deleteRow($id); // Panggil fungsi penghapusan di model
+        $deleted = $this->ModelHome->deleteRow($id); // Panggil fungsi penghapusan di model
 
         // Jika penghapusan berhasil, kirimkan respon 'success' kembali ke JavaScript
         if ($deleted) {
@@ -55,17 +49,13 @@ class Keranjang extends CI_Controller
     public function checkout()
     {
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-        $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
-        $data['keranjang'] = $this->ModelGadget->keranjangWhere(['keranjang.id' => $this->session->userdata('id')])->result_array();
-        $jumlah_data = $this->ModelGadget->getJumlahData($this->session->userdata('id')); // Mengambil jumlah data dari model
+        $data['keranjang'] = $this->ModelHome->keranjangWhere(['keranjang.id' => $this->session->userdata('id')])->result_array();
+        
+        $jumlah_data = $this->ModelHome->getJumlahData($this->session->userdata('id')); // Mengambil jumlah data dari model
         $data['jumlah_data'] = $jumlah_data;
 
         $id = $this->session->userdata('id');
-        // Memuat model
-        $data['detail_user'] = $this->ModelUser->getDetailUser($id)->row_array();
-
-
+        $data['detail_user'] = $this->ModelHome->getAlamat($id)->row_array();
         $selectedItems = $this->input->get('items');
 
         if ($selectedItems !== null) {
@@ -75,35 +65,10 @@ class Keranjang extends CI_Controller
             $selectedItemIds = [0]; // Misalnya, array kosong jika data tidak tersedia
         }
 
-        // Load model
-
-
-        $dipilih = $this->ModelGadget->getSelectedItems($selectedItemIds);
+        $dipilih = $this->ModelHome->getSelectedItems($selectedItemIds);
         $reversed_dipilih = array_reverse($dipilih);
         // Ambil detail barang yang dipilih dari model
         $data['selectedItems'] = $reversed_dipilih;
-
-        $alamat = $this->ModelUser->getAlamat($id);
-        // Pisahkan alamat berdasarkan komaet the address from the database
-        // Pisahkan alamat jika data alamat tidak kosong
-        $alamatArray = [];
-        if (!empty($alamat)) {
-            $alamatString = implode(', ', $alamat); // Convert array to string with comma separation
-            $alamatArray = explode(', ', $alamatString);
-        }
-
-        // Buat variabel untuk setiap bagian alamat jika array tidak kosong
-        $data['alamat'] = !empty($alamatArray[0]) ? $alamatArray[0] : ''; // Jalan Ciherang Hegar Sari No.9
-        $data['rt'] = !empty($alamatArray[1]) ? $alamatArray[1] : ''; // Ciherang, Dramaga (RT.05/RW.08)
-        $data['rw'] = !empty($alamatArray[2]) ? $alamatArray[2] : ''; // KAB. BOGOR
-        $data['kelurahan'] = !empty($alamatArray[3]) ? $alamatArray[3] : ''; // JAWA BARAT
-        $data['kecamatan'] = !empty($alamatArray[4]) ? $alamatArray[4] : ''; // ID
-        $data['kota'] = !empty($alamatArray[5]) ? $alamatArray[5] : '';
-        $data['provinsi'] = !empty($alamatArray[6]) ? $alamatArray[6] : '';
-        $data['kodepos'] = !empty($alamatArray[7]) ? $alamatArray[7] : '';
-
-        // Load view checkout dengan data barang yang dipilih
-
 
         $this->load->view('templates/front-end/fheader', $data);
         $this->load->view('templates/front-end/ftopbar', $data);
@@ -125,13 +90,11 @@ class Keranjang extends CI_Controller
         $provinsi = $this->input->post('provinsi');
         $kodepos = $this->input->post('kodepos');
 
-        // ...
-
         // Menggabungkan nilai-nilai input menjadi satu kalimat dipisahkan oleh koma
         $hasil = implode(', ', array_filter([$alamat, $rt, $rw, $kelurahan, $kecamatan, $kota, $provinsi, $kodepos]));
 
         // Memanggil model untuk menyimpan data ke database
-        $affectedRows = $this->ModelUser->updateAlamat($id, $nama, $noTelepon, $hasil);
+        $affectedRows = $this->ModelHome->updateAlamat($id, $nama, $noTelepon, $hasil);
 
         if ($affectedRows > 0) {
             redirect('keranjang/checkout?');
@@ -143,7 +106,7 @@ class Keranjang extends CI_Controller
     public function create_order()
     {
         // mendapatakan data yang akan diinput
-        $last_order = $this->ModelGadget->get_last_order();
+        $last_order = $this->ModelHome->get_last_order();
         $user_id = $this->session->userdata('id');
         $id_gadget = $this->input->post('id_gadget');
         $qty = $this->input->post('qty');
@@ -160,7 +123,7 @@ class Keranjang extends CI_Controller
         } else {
             $last_number = 0;
         }
-        $id_alamat = $this->ModelUser->getAlamat1($user_id);
+        $id_alamat = $this->ModelHome->getAlamat1($user_id);
         if ($id_alamat !== false) {
             // Jika id_alamat berhasil didapatkan, simpan ke dalam variabel di controller
             $this->id_alamat = $id_alamat;
@@ -184,9 +147,9 @@ class Keranjang extends CI_Controller
                     // Lakukan apa pun yang diperlukan dengan data produk ini
                     // Misalnya, simpan ke database, hitung total, dll.
                     // Contoh penyimpanan ke database:
-                    $this->ModelGadget->insert_order_item($id_pesan, $id, $id_gadget, $jumlah, $total, $status, $id_alamat, $tanggal_pesan);
-                    $this->ModelGadget->hapus_item_keranjang($id, $id_gadget);
-                    $this->ModelGadget->kurangiStok($id_gadget, $jumlah);
+                    $this->ModelHome->insert_order_item($id_pesan, $id, $id_gadget, $jumlah, $total, $status, $id_alamat, $tanggal_pesan);
+                    $this->ModelHome->hapus_item_keranjang($id, $id_gadget);
+                    $this->ModelHome->kurangiStok($id_gadget, $jumlah);
                 }
             }
             redirect('pesanan');

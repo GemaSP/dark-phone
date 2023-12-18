@@ -25,7 +25,7 @@
                         <hr>
                         <ul class="nav nav-pills flex-column mb-auto">
                             <li class="nav-item">
-                                <a href="<?= base_url('akun/profile'); ?>" class="nav-link text-white"
+                                <a href="<?= base_url('akun'); ?>" class="nav-link text-white"
                                     aria-current="page">
                                     <svg class="bi me-2" width="16" height="16">
                                         <use xlink:href="#home"></use>
@@ -58,7 +58,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= base_url('akun/pesanan'); ?>" class="nav-link text-white">
+                                <a href="<?= base_url('pesanan'); ?>" class="nav-link text-white">
                                     <svg class="bi me-2" width="16" height="16">
                                         <use xlink:href="#people-circle"></use>
                                     </svg>
@@ -181,14 +181,43 @@
                                             </div>
                                             <div class="row justify-content-center align-items-center mb-3">
                                                 <div class="col text-start">
-                                                    <p class="text-muted mb-0">Silahkan konfirmasi setelah menerima pesanan
-                                                    </p>
+                                                <?php if ($p['status'] == 1): ?>
+                                                <p class="text-muted mb-0">Silahkan Bayar Pesanan</p>
+                                            <?php elseif ($p['status'] == 2): ?>
+                                                <p class="text-muted mb-0">Mohon bersabar kami sedang mengemas pesanan anda</p>
+                                            <?php elseif ($p['status'] == 3): ?>
+                                                <p class="text-muted mb-0">Silahkan konfirmasi setelah menerima pesanan</p>
+                                            <?php elseif ($p['status'] == 4): ?>
+                                                <p class="text-muted mb-0">Diterima oleh Anda</p>
+                                            <?php elseif ($p['status'] == 5): ?>
+                                                <p class="text-muted mb-0">Dibatalkan oleh Anda</p>
+                                            <?php endif; ?>
                                                 </div>
                                                 <div class="col text-end">
-                                                    <button class="btn-sm btn-primary me-2">Pesanan Selesai</button>
+                                                <?php if ($p['status'] == 1): ?>
+                                                <p class="text-end">Pesanan belum dibayar</p>
+                                            <?php elseif ($p['status'] == 2): ?>
+                                                <button onclick="window.location.href='<?= base_url('pesanan/pembatalan/') . $p['id_pemesanan']; ?>';" class="btn-sm btn-primary me-2">Batalkan Pesanan</button>
                                                     <button
                                                         onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
                                                         class="btn-sm btn-secondary">Detail Pesanan</button>
+                                            <?php elseif ($p['status'] == 3): ?>
+                                                <button onclick="window.location.href='<?= base_url('pesanan/konfirmasi/') . $p['id_pemesanan']; ?>';" class="btn-sm btn-primary me-2">Pesanan Selesai</button>
+                                                    <button
+                                                        onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
+                                                        class="btn-sm btn-secondary">Detail Pesanan</button>
+                                            <?php elseif ($p['status'] == 4): ?>
+                                                <button onclick="window.location.href='<?= base_url('home/detailProducts/') . $p['id_gadget']; ?>';" class="btn-sm btn-primary me-2">Beli Lagi</button>
+                                                <button
+                                                        onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
+                                                        class="btn-sm btn-secondary">Detail Pesanan</button>
+                                            <?php elseif ($p['status'] == 5): ?>
+                                                <button onclick="window.location.href='<?= base_url('home/detailProducts/') . $p['id_gadget']; ?>';" class="btn-sm btn-primary me-2">Beli Lagi</button>
+                                                <button
+                                                        onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
+                                                        class="btn-sm btn-secondary">Detail Pesanan</button>
+                                            <?php endif; ?>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -198,7 +227,74 @@
                         </div>
                         <!-- Konten Tab Belum Bayar -->
                         <div class="tab-pane fade" id="belumBayar" role="tabpanel" aria-labelledby="belumBayar-tab">
-                            Konten untuk status Belum Bayar
+                        <?php
+                            $adaPesananStatus2 = false; // Inisialisasi variabel untuk menandai keberadaan pesanan dengan status 2
+                            foreach ($pemesanan as $p):
+                                if ($p['status'] == 1):
+                                    $adaPesananStatus2 = true; // Mengatur variabel jika ada pesanan dengan status 2
+                                    ?>
+                                    <div class="container mt-5 border">
+                                        <div class="row">
+                                            <div class="col mt-2">
+                                                <!-- Deskripsi pesanan -->
+                                                <p class="text-end">Pesanan belum dibayar</p>
+                                                <hr class="line">
+                                                <!-- Gambar produk -->
+                                                <div class="row align-items-center mb-3">
+                                                    <div class="col-auto">
+                                                        <img src="<?= base_url('assets/back-end/img/upload/') . $p['img']; ?>"
+                                                            alt="Produk" class="img-fluid" style="max-width: 100px;">
+                                                    </div>
+                                                    <div class="col">
+                                                        <!-- Nama produk -->
+                                                        <h5>
+                                                            <?= $p['nama_gadget']; ?>
+                                                        </h5>
+                                                        <!-- Kuantitas -->
+                                                        <p>Kuantitas:
+                                                            <?= $p['qty']; ?>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <!-- Harga produk -->
+                                                        <p>Harga:
+                                                            <?= $p['harga']; ?>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <!-- Garis horizontal -->
+                                                <hr class="line">
+                                                <!-- Tombol selesai dan ajukan kembalian -->
+                                                <div class="row align-items-center mb-3">
+                                                    <div class="col text-end">
+                                                        <p>Total Pesanan: Rp
+                                                            <?= $p['total_harga']; ?>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row justify-content-center align-items-center mb-3">
+                                                    <div class="col text-start">
+                                                        <p class="text-muted mb-0">Silahkan konfirmasi setelah menerima
+                                                            pesanan
+                                                        </p>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                    <button onclick="window.location.href='<?= base_url('pesanan/pembatalan/') . $p['id_pemesanan']; ?>';" class="btn-sm btn-primary me-2">Batalkan Pesanan</button>
+                                                    <button
+                                                        onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
+                                                        class="btn-sm btn-secondary">Detail Pesanan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                endif;
+                            endforeach;
+                            if (!$adaPesananStatus2): // Menampilkan pesan jika tidak ada pesanan dengan status 2
+                                ?>
+                                <p>Tidak ada pesanan yang belum dibayar</p>
+                            <?php endif; ?>
                         </div>
                         <!-- Konten Tab Sedang Dikemas -->
                         <div class="tab-pane fade" id="sedangDikemas" role="tabpanel"
@@ -251,13 +347,12 @@
                                                 </div>
                                                 <div class="row justify-content-center align-items-center mb-3">
                                                     <div class="col text-start">
-                                                        <p class="text-muted mb-0">Silahkan konfirmasi setelah menerima
-                                                            pesanan
+                                                        <p class="text-muted mb-0">Mohon bersabar kami sedang mengemas pesanan anda
                                                         </p>
                                                     </div>
                                                     <div class="col text-end">
-                                                        <button class="btn-sm btn-primary me-2">Pesanan Selesai</button>
-                                                        <button
+                                                    <button onclick="window.location.href='<?= base_url('pesanan/pembatalan/') . $p['id_pemesanan']; ?>';" class="btn-sm btn-primary me-2">Batalkan Pesanan</button>
+                                                    <button
                                                         onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
                                                         class="btn-sm btn-secondary">Detail Pesanan</button>
                                                     </div>
@@ -398,7 +493,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="col text-end">
-                                                        <button class="btn-sm btn-primary me-2">Ajukan Pengembalian</button>
+                                                    <button onclick="window.location.href='<?= base_url('home/detailProducts/') . $p['id_gadget']; ?>';" class="btn-sm btn-primary me-2">Beli Lagi</button>
                                                         <button
                                                         onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
                                                         class="btn-sm btn-secondary">Detail Pesanan</button>
@@ -412,12 +507,79 @@
                             endforeach;
                             if (!$adaPesananStatus2): // Menampilkan pesan jika tidak ada pesanan dengan status 2
                                 ?>
-                                <p>Tidak ada pesanan yang sedang dikemas</p>
+                                <p>Tidak ada pesanan yang diterima</p>
                             <?php endif; ?>
                         </div>
                         <!-- Konten Tab Dibatalkan -->
                         <div class="tab-pane fade" id="dibatalkan" role="tabpanel" aria-labelledby="dibatalkan-tab">
-                            Konten untuk status Dibatalkan
+                        <?php
+                            $adaPesananStatus2 = false; // Inisialisasi variabel untuk menandai keberadaan pesanan dengan status 2
+                            foreach ($pemesanan as $p):
+                                if ($p['status'] == 5):
+                                    $adaPesananStatus2 = true; // Mengatur variabel jika ada pesanan dengan status 2
+                                    ?>
+                                    <div class="container mt-5 border">
+                                        <div class="row">
+                                            <div class="col mt-2">
+                                                <!-- Deskripsi pesanan -->
+                                                <p class="text-end">Pesanan telah dibatalkan</p>
+                                                <hr class="line">
+                                                <!-- Gambar produk -->
+                                                <div class="row align-items-center mb-3">
+                                                    <div class="col-auto">
+                                                        <img src="<?= base_url('assets/back-end/img/upload/') . $p['img']; ?>"
+                                                            alt="Produk" class="img-fluid" style="max-width: 100px;">
+                                                    </div>
+                                                    <div class="col">
+                                                        <!-- Nama produk -->
+                                                        <h5>
+                                                            <?= $p['nama_gadget']; ?>
+                                                        </h5>
+                                                        <!-- Kuantitas -->
+                                                        <p>Kuantitas:
+                                                            <?= $p['qty']; ?>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <!-- Harga produk -->
+                                                        <p>Harga:
+                                                            <?= $p['harga']; ?>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <!-- Garis horizontal -->
+                                                <hr class="line">
+                                                <!-- Tombol selesai dan ajukan kembalian -->
+                                                <div class="row align-items-center mb-3">
+                                                    <div class="col text-end">
+                                                        <p>Total Pesanan: Rp
+                                                            <?= $p['total_harga']; ?>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row justify-content-center align-items-center mb-3">
+                                                    <div class="col text-start">
+                                                        <p class="text-muted mb-0">Dibatalkan Anda
+                                                        </p>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <button onclick="window.location.href='<?= base_url('home/detailProducts/') . $p['id_gadget']; ?>';" class="btn-sm btn-primary me-2">Beli Lagi</button>
+                                                        <button
+                                                        onclick="window.location.href='<?= base_url('pesanan/detailpesanan/') . $p['id_pemesanan']; ?>';"
+                                                        class="btn-sm btn-secondary">Detail Pesanan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                endif;
+                            endforeach;
+                            if (!$adaPesananStatus2): // Menampilkan pesan jika tidak ada pesanan dengan status 2
+                                ?>
+                                <p>Tidak ada pesanan yang dibatalkan</p>
+                            <?php endif; ?>
+                        </div>
                         </div>
                     </div>
                 </div>

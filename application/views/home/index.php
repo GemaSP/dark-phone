@@ -76,9 +76,6 @@
 </section>
 <!-- end of about us -->
 
-
-
-
 <script>
 function sessionExists() {
     return new Promise(function(resolve, reject) {

@@ -7,8 +7,8 @@
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Data User</h6>
                             <div class="tabs">
-                                <button class="tablink" onclick="openTab(event, 'pelanggan')">Tabel Pelanggan</button>
-                                <button class="tablink" onclick="openTab(event, 'admin')">Tabel Admin</button>
+                                <button class="tablink btn-sm btn-primary" onclick="openTab(event, 'pelanggan')">Tabel Pelanggan</button>
+                                <button class="tablink btn-sm btn-primary" onclick="openTab(event, 'admin')">Tabel Admin</button>
                             </div>
                             <div id="pelanggan" class="tabcontent">
                             <table class="table table-hover">

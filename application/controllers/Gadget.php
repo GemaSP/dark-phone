@@ -16,7 +16,6 @@ class Gadget extends CI_Controller
         $data['judul'] = 'Data Gadget';
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
         $data['gadget'] = $this->ModelGadget->getGadget()->result_array();
-        $data['merek'] = $this->ModelGadget->getMerek()->result_array();
         
         $this->form_validation->set_rules('nama_gadget', 'Nama Gadget', 'required|min_length[3]', [
             'required' => 'Judul Gadget harus diisi',

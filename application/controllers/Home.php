@@ -9,8 +9,8 @@ class Home extends CI_Controller
         $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
         $data['gadget'] = $this->ModelGadget->getGadget()->result_array();
         $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-        $jumlah_data = $this->ModelGadget->getJumlahData($this->session->userdata('id'));
 
+        $jumlah_data = $this->ModelHome->getJumlahData($this->session->userdata('id'));
         $data['jumlah_data'] = $jumlah_data;
 
         //Meload halaman view beserta data yg telah diambil
@@ -21,21 +21,16 @@ class Home extends CI_Controller
         $this->load->view('templates/front-end/ffooter', $data);
     }
 
-    public function detailProducts()
+    public function checkSessionStatus()
     {
-        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-        $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-        $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
-        $jumlah_data = $this->ModelGadget->getJumlahData($this->session->userdata('id')); // Mengambil jumlah data dari model
+        // Lakukan pemeriksaan sesi di sini
+        $isLoggedIn = $this->session->userdata('email');
 
-        $data['jumlah_data'] = $jumlah_data;
-        $this->load->view('templates/front-end/fheader', $data);
-        $this->load->view('templates/front-end/ftopbar', $data);
-        $this->load->view('home/detail_product', $data);
-        $this->load->view('templates/front-end/ffooter', $data);
+        // Kirim respons sebagai JSON ke JavaScript
+        header('Content-Type: application/json');
+        echo json_encode(['isLoggedIn' => $isLoggedIn]);
+        exit();
     }
-
-
 
     public function tambahKeranjang()
     {
@@ -43,19 +38,14 @@ class Home extends CI_Controller
             // Tampilkan pesan jika tidak ada session
             echo "<script>alert('Silahkan login terlebih dahulu sebelum menambah item pada keranjang');</script>";
         } else {
-            // Lakukan operasi tambah ke keranjang jika session ada
-            // ...
-            $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-            $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-            $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
             $id = $this->session->userdata('id');
             $idGadget = $this->uri->segment(3);
 
-            // Check if the combination of id and id_gadget already exists
-            $existingData = $this->ModelGadget->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
+            //Mengecek apakah kombinasi dari id dan id_gadget sudah ada
+            $existingData = $this->ModelHome->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
 
             if (!$existingData) {
-                // If the combination doesn't exist, insert new data
+                // Jika kombinasi tidak ada, masukan data baru
                 $insert = [
                     'id' => $id,
                     'id_gadget' => $idGadget,
@@ -63,7 +53,7 @@ class Home extends CI_Controller
                 ];
                 $this->db->insert('keranjang', $insert);
             } else {
-                // If the combination exists, increment the jumlah_barang
+                // Jika Kombinasi ada, tambahkan jumlah barangnya
                 $currentQuantity = $existingData['jumlah_barang'];
                 $newQuantity = $currentQuantity + 1;
 
@@ -76,31 +66,34 @@ class Home extends CI_Controller
         redirect('home');
     }
 
-    public function checkSessionStatus() {
-        // Lakukan pemeriksaan sesi di sini (misalnya, cek session user)
-        $isLoggedIn = $this->session->userdata('email'); // Ganti ini dengan logika sesuai dengan sesi Anda
-    
-        // Kirim respons sebagai JSON ke JavaScript
-        header('Content-Type: application/json');
-        echo json_encode(['isLoggedIn' => $isLoggedIn]);
-        exit();
+    public function detailProducts()
+    {
+        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
+        $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
+        
+        $jumlah_data = $this->ModelHome->getJumlahData($this->session->userdata('id')); // Mengambil jumlah data dari model
+        $data['jumlah_data'] = $jumlah_data;
+        
+        $this->load->view('templates/front-end/fheader', $data);
+        $this->load->view('templates/front-end/ftopbar', $data);
+        $this->load->view('home/detail_product', $data);
+        $this->load->view('templates/front-end/ffooter', $data);
     }
+
     public function buyNow()
     {
         if (!$this->session->userdata('email')) {
-            redirect('home');
+            // Tampilkan pesan jika tidak ada session
+            echo "<script>alert('Silahkan login terlebih dahulu sebelum menambah item pada keranjang');</script>";
         } else {
-            $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-            $data['merek'] = $this->ModelGadget->getMerek()->result_array();
-            $data['gadget'] = $this->ModelGadget->gadgetWhere(['id_gadget' => $this->uri->segment(3)])->row_array();
             $id = $this->session->userdata('id');
             $idGadget = $this->uri->segment(3);
 
-            // Check if the combination of id and id_gadget already exists
-            $existingData = $this->ModelGadget->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
+            //Mengecek apakah kombinasi dari id dan id_gadget sudah ada
+            $existingData = $this->ModelHome->keranjangWhere(['keranjang.id' => $id, 'keranjang.id_gadget' => $idGadget])->row_array();
 
             if (!$existingData) {
-                // If the combination doesn't exist, insert new data
+                // Jika kombinasi tidak ada, masukan data baru
                 $insert = [
                     'id' => $id,
                     'id_gadget' => $idGadget,
@@ -108,7 +101,7 @@ class Home extends CI_Controller
                 ];
                 $this->db->insert('keranjang', $insert);
             } else {
-                // If the combination exists, increment the jumlah_barang
+                // Jika Kombinasi ada, tambahkan jumlah barangnya
                 $currentQuantity = $existingData['jumlah_barang'];
                 $newQuantity = $currentQuantity + 1;
 
@@ -117,65 +110,7 @@ class Home extends CI_Controller
                 $this->db->where('id_gadget', $idGadget);
                 $this->db->update('keranjang');
             }
-
-            redirect('keranjang');
         }
+        redirect('keranjang');
     }
-
-    public function ubahProfil()
-    {
-        $data['judul'] = 'Ubah Profil';
-        $data['user'] = $this->ModelUser->cekData(['email' => $this->session->userdata('email')])->row_array();
-
-        $this->form_validation->set_rules('username', 'Nama Lengkap', 'required|trim', [
-            'required' => 'Nama tidak Boleh Kosong'
-        ]);
-
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('user/ubah-profile', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $username = $this->input->post('username', true);
-            $email = $this->input->post('email', true);
-
-            //jika ada gambar yang akan diupload
-            $upload_image = $_FILES['image']['name'];
-
-            if ($upload_image) {
-                $config['upload_path'] = './assets/back-end/img/profile/';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = '5000';
-                $config['max_width'] = '3000';
-                $config['max_height'] = '3000';
-                $config['file_name'] = 'pro' . time();
-
-                $this->load->library('upload', $config);
-
-                if ($this->upload->do_upload('image')) {
-                    $gambar_lama = $data['user']['image'];
-                    if ($gambar_lama != 'default.jpg') {
-                        unlink(FCPATH . 'assets/back-end/img/profile/' . $gambar_lama);
-                    }
-
-                    $gambar_baru = $this->upload->data('file_name');
-                    $this->db->set('image', $gambar_baru);
-                } else {
-                }
-            }
-
-            $this->db->set('username', $username);
-            $this->db->where('email', $email);
-            $this->db->update('user');
-            $this->session->set_flashdata('pesan',
-                '<div class="alert alert-success alert-message" role="alert">
-            Profil Berhasil diubah
-            </div>');
-            redirect('home/akun/profile');
-        }
-    }
-
 }
